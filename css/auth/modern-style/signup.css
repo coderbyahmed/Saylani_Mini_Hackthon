@@ -1,0 +1,898 @@
+/* ==========================================================
+   SIGNUP — MODERN SAAS AUTH UI
+   Premium, compact, production-ready stylesheet
+   ========================================================== */
+
+/* ==========================================================
+   RESET & BASE
+   ========================================================== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-1: #0f172a;
+  --bg-2: #1e1b4b;
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --card-border: rgba(255, 255, 255, 0.6);
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --label: #334155;
+  --input-bg: #f8fafc;
+  --input-border: #e2e8f0;
+  --input-border-focus: #6366f1;
+  --primary-1: #6366f1;
+  --primary-2: #8b5cf6;
+  --primary-3: #ec4899;
+  --ring: rgba(99, 102, 241, 0.18);
+  --shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.35);
+  --radius-sm: 10px;
+  --font: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px 16px;
+  position: relative;
+  overflow-x: hidden;
+  background: radial-gradient(circle at 20% 20%, #1e1b4b, transparent 55%),
+    radial-gradient(circle at 80% 0%, #312e81, transparent 50%),
+    linear-gradient(135deg, var(--bg-1), var(--bg-2));
+}
+
+/* ==========================================================
+   ANIMATED BACKGROUND — FLOATING GRADIENT BLOBS
+   ========================================================== */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(70px);
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Large blob — top left */
+body::before {
+  width: 460px;
+  height: 460px;
+  top: -140px;
+  left: -120px;
+  opacity: 0.55;
+  background: radial-gradient(circle at 30% 30%, var(--primary-1), transparent 70%);
+  animation: float-a 16s ease-in-out infinite;
+}
+
+/* Large blob — bottom right */
+body::after {
+  width: 520px;
+  height: 520px;
+  bottom: -160px;
+  right: -140px;
+  opacity: 0.5;
+  background: radial-gradient(circle at 70% 70%, var(--primary-3), transparent 70%);
+  animation: float-b 20s ease-in-out infinite;
+}
+
+@keyframes float-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(60px, 40px) scale(1.12);
+  }
+}
+
+@keyframes float-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-50px, -60px) scale(1.08);
+  }
+}
+
+/* ==========================================================
+   FORM CARD
+   ========================================================== */
+form {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 320px;
+  background: var(--card-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--card-border);
+  border-radius: 22px;
+  padding: 22px 26px 18px;
+  box-shadow: var(--shadow);
+  animation: card-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==========================================================
+   AUTH HEADER
+   ========================================================== */
+.auth-header {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.auth-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--primary-1);
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+
+.auth-title {
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--primary-1), var(--primary-2), var(--primary-3));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.auth-description {
+  margin-top: 6px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* ==========================================================
+   FORM FIELDS
+   ========================================================== */
+.form-group {
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--label);
+  margin-bottom: 4px;
+}
+
+/* ==========================================================
+   INPUTS
+   ========================================================== */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  height: 40px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--input-bg);
+  border: 1.5px solid var(--input-border);
+  border-radius: var(--radius-sm);
+  padding: 0 12px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.form-group textarea {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 12px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #94a3b8;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--input-border-focus);
+  background: #fff;
+  box-shadow: 0 0 0 4px var(--ring);
+}
+
+/* ==========================================================
+   PASSWORD FIELD + EYE TOGGLE
+   ========================================================== */
+#password,
+#confirmPassword {
+  padding-right: 38px;
+}
+
+.eye-toggle {
+  position: absolute;
+  top: 27px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.eye-toggle:hover {
+  background: rgba(99, 102, 241, 0.1);
+}
+
+/* Eye icon drawn with pure CSS (no JS / no images) */
+.eye-toggle::before {
+  content: "";
+  width: 16px;
+  height: 10px;
+  border: 2px solid var(--text-muted);
+  border-radius: 50% / 65%;
+}
+
+.eye-toggle::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+
+.eye-toggle:hover::before {
+  border-color: var(--primary-1);
+}
+
+.eye-toggle:hover::after {
+  background: var(--primary-1);
+}
+
+/* Password visible state */
+.eye-toggle--visible::before {
+  border-color: var(--primary-1);
+  background: rgba(99, 102, 241, 0.06);
+}
+
+.eye-toggle--visible::after {
+  width: 8px;
+  height: 8px;
+  background: var(--primary-1);
+}
+
+.eye-toggle--visible:hover {
+  background: rgba(99, 102, 241, 0.15);
+}
+
+/* ==========================================================
+   PRIMARY BUTTON
+   ========================================================== */
+.btn-primary {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--primary-1), var(--primary-2), var(--primary-3));
+  background-size: 200% 200%;
+  background-position: 0% 50%;
+  box-shadow: 0 10px 24px -8px rgba(99, 102, 241, 0.6);
+  transition: background-position 0.4s ease, transform 0.15s ease, box-shadow 0.25s ease;
+}
+
+.btn-primary:hover {
+  background-position: 100% 50%;
+  box-shadow: 0 14px 30px -8px rgba(139, 92, 246, 0.7);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px -8px rgba(99, 102, 241, 0.6);
+}
+
+/* Keep button text always visible in every state */
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus {
+  color: #fff;
+}
+
+/* ==========================================================
+   GOOGLE BUTTON
+   ========================================================== */
+.btn-google {
+  width: 100%;
+  height: 40px;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--card-bg);
+  border: 1.5px solid var(--input-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.btn-google:hover {
+  background: #fff;
+  border-color: var(--input-border-focus);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+.btn-google:active {
+  transform: scale(0.98);
+  background: #f1f5f9;
+}
+
+.btn-google:disabled {
+  background: var(--primary-1);
+  color: #fff;
+  border-color: var(--primary-1);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.btn-google + .btn-google {
+  margin-top: 14px;
+}
+
+/* ==========================================================
+   LOGIN REDIRECT / FOOTER
+   ========================================================== */
+.login-redirect {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.login-redirect a {
+  color: var(--primary-1);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.login-redirect a:hover {
+  color: var(--primary-3);
+  text-decoration: underline;
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+/* Large Desktop */
+@media (max-width: 1200px) {
+  form {
+    padding: 20px 24px 16px;
+  }
+}
+
+/* Desktop */
+@media (max-width: 1024px) {
+  form {
+    max-width: 330px;
+    padding: 18px 22px 14px;
+  }
+
+  .auth-title {
+    font-size: 21px;
+  }
+
+  .auth-badge {
+    font-size: 10px;
+    padding: 3px 9px;
+    margin-bottom: 8px;
+  }
+
+  .form-group input,
+  .form-group select {
+    height: 38px;
+    font-size: 12.5px;
+  }
+
+  .form-group textarea {
+    min-height: 64px;
+    padding: 7px 12px;
+  }
+
+  .btn-primary,
+  .btn-google {
+    height: 38px;
+    font-size: 13px;
+  }
+}
+
+/* Laptop */
+@media (max-width: 991px) {
+  form {
+    max-width: 340px;
+    padding: 16px 20px 14px;
+  }
+
+  .auth-header {
+    margin-bottom: 12px;
+  }
+
+  .auth-title {
+    font-size: 20px;
+  }
+
+  .auth-description {
+    font-size: 11.5px;
+    margin-top: 5px;
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+  }
+
+  .form-group label {
+    font-size: 11px;
+    margin-bottom: 3px;
+  }
+
+  .form-group input,
+  .form-group select {
+    height: 36px;
+    font-size: 12px;
+    padding: 0 10px;
+  }
+
+  .form-group textarea {
+    min-height: 56px;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .eye-toggle {
+    top: 24px;
+    width: 26px;
+    height: 26px;
+  }
+
+  .eye-toggle::before {
+    width: 14px;
+    height: 9px;
+  }
+
+  .eye-toggle::after {
+    width: 4px;
+    height: 4px;
+  }
+
+  #password,
+  #confirmPassword {
+    padding-right: 34px;
+  }
+
+  .btn-primary,
+  .btn-google {
+    height: 36px;
+    font-size: 12.5px;
+  }
+
+  .btn-primary {
+    margin-top: 3px;
+  }
+
+  .login-redirect {
+    margin-top: 12px;
+    font-size: 11.5px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  body {
+    padding: 20px 14px;
+  }
+
+  form {
+  max-width: 350px;
+    padding: 16px 18px 12px;
+    border-radius: 18px;
+  }
+
+  .auth-title {
+    font-size: 19px;
+  }
+
+  .form-group input,
+  .form-group select {
+    height: 38px;
+    font-size: 12.5px;
+  }
+
+  .btn-primary,
+  .btn-google {
+    height: 38px;
+  }
+
+  .eye-toggle {
+    top: 26px;
+  }
+}
+
+/* Large Mobile */
+@media (max-width: 480px) {
+  body {
+    padding: 12px 10px;
+    align-items: flex-start;
+    padding-top: 24px;
+  }
+
+  form {
+    max-width: 100%;
+    padding: 16px 16px 14px;
+    border-radius: 18px;
+    box-shadow: 0 14px 36px -12px rgba(15, 23, 42, 0.3);
+  }
+
+  .auth-header {
+    margin-bottom: 12px;
+  }
+
+  .auth-badge {
+    font-size: 9px;
+    padding: 3px 8px;
+    margin-bottom: 6px;
+  }
+
+  .auth-title {
+    font-size: 20px;
+  }
+
+  .auth-description {
+    font-size: 11px;
+    margin-top: 4px;
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+  }
+
+  .form-group label {
+    font-size: 11px;
+    margin-bottom: 3px;
+  }
+
+  .form-group input,
+  .form-group select {
+    height: 40px;
+    font-size: 13px;
+    padding: 0 11px;
+  }
+
+  .form-group textarea {
+    min-height: 60px;
+    padding: 7px 11px;
+    font-size: 13px;
+  }
+
+  .eye-toggle {
+    top: 26px;
+    right: 5px;
+    width: 26px;
+    height: 26px;
+  }
+
+  .eye-toggle::before {
+    width: 14px;
+    height: 9px;
+  }
+
+  #password,
+  #confirmPassword {
+    padding-right: 36px;
+  }
+
+  .btn-primary,
+  .btn-google {
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .btn-primary {
+    margin-top: 2px;
+  }
+
+  .btn-primary:hover {
+    transform: none;
+  }
+
+  .login-redirect {
+    margin-top: 10px;
+    font-size: 11px;
+  }
+
+  body::before,
+  body::after {
+    filter: blur(55px);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 360px) {
+  body {
+    padding: 8px 6px;
+    padding-top: 16px;
+  }
+
+  form {
+    padding: 14px 14px 12px;
+    border-radius: 16px;
+  }
+
+  .auth-title {
+    font-size: 18px;
+  }
+
+  .auth-badge {
+    font-size: 8px;
+    padding: 2px 7px;
+  }
+
+  .form-group {
+    margin-bottom: 8px;
+  }
+
+  .form-group label {
+    font-size: 10px;
+    margin-bottom: 2px;
+  }
+
+  .form-group input,
+  .form-group select {
+    height: 36px;
+    font-size: 12px;
+    padding: 0 9px;
+  }
+
+  .form-group textarea {
+    min-height: 52px;
+    padding: 6px 9px;
+    font-size: 12px;
+  }
+
+  .eye-toggle {
+    top: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .eye-toggle::before {
+    width: 13px;
+    height: 8px;
+  }
+
+  .btn-primary,
+  .btn-google {
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .login-redirect {
+    font-size: 10.5px;
+    margin-top: 8px;
+  }
+}
+
+/* Short viewport — tighten vertical spacing */
+@media (max-height: 700px) {
+  .auth-header {
+    margin-bottom: 10px;
+  }
+
+  .auth-badge {
+    margin-bottom: 5px;
+  }
+
+  .auth-description {
+    margin-top: 3px;
+  }
+
+  .form-group {
+    margin-bottom: 7px;
+  }
+
+  .btn-google {
+    margin-top: 8px;
+  }
+
+  .login-redirect {
+    margin-top: 8px;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after,
+  form {
+    animation: none;
+  }
+}
+
+/* ==========================================================
+   ==========================================================
+   OPTIONAL FIELDS — PREWRITTEN CSS (KEEP COMMENTED)
+   Uncomment the block matching the HTML field you enable.
+   These target the existing markup (.form-group + #id),
+   so no new classes are required.
+   ==========================================================
+   ========================================================== */
+
+/* ==========================================================
+   PHONE NUMBER
+   ========================================================== */
+
+
+.form-group #phone {
+  letter-spacing: 0.02em;
+}
+.form-group #phone:focus {
+  border-color: var(--input-border-focus);
+  box-shadow: 0 0 0 4px var(--ring);
+}
+
+
+/* ==========================================================
+   PROFILE IMAGE (FILE UPLOAD)
+   ==========================================================
+.form-group #profileImage {
+  height: auto;
+  padding: 7px 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.form-group #profileImage::file-selector-button {
+  margin-right: 10px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--primary-1), var(--primary-2));
+  transition: opacity 0.2s ease;
+}
+.form-group #profileImage::file-selector-button:hover {
+  opacity: 0.9;
+}
+*/
+
+/* ==========================================================
+   GENDER (SELECT)
+   ==========================================================
+.form-group #gender {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
+    linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+  background-position: calc(100% - 16px) center, calc(100% - 12px) center;
+  background-size: 4px 4px, 4px 4px;
+  background-repeat: no-repeat;
+  padding-right: 32px;
+  cursor: pointer;
+}
+*/
+
+/* ==========================================================
+   DATE OF BIRTH
+   ==========================================================
+.form-group #dob {
+  color: var(--text);
+  cursor: pointer;
+}
+.form-group #dob::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+.form-group #dob::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+*/
+
+/* ==========================================================
+   CNIC
+   ==========================================================
+.form-group #cnic {
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+*/
+
+/* ==========================================================
+   ADDRESS (TEXTAREA)
+   ==========================================================
+.form-group #address {
+  min-height: 72px;
+  resize: vertical;
+  line-height: 1.5;
+}
+*/
+
+/* ==========================================================
+   CITY
+   ==========================================================
+.form-group #city {
+  text-transform: capitalize;
+}
+*/
+
+ /* ==========================================================
+   ROLE (SELECT)
+   ========================================================== */
+
+   
+/* .form-group #role {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
+    linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+  background-position: calc(100% - 16px) center, calc(100% - 12px) center;
+  background-size: 4px 4px, 4px 4px;
+  background-repeat: no-repeat;
+  padding-right: 32px;
+  cursor: pointer;
+} */
+

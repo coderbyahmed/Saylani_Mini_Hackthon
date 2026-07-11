@@ -1,0 +1,67 @@
+.dashboard-shell {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  z-index: 0;
+}
+
+.main-content {
+  margin-left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
+  display: flex;
+  flex-direction: column;
+  padding: 0 28px 36px;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+  transition: margin-left var(--transition-slow), width var(--transition-slow);
+}
+
+.section-heading {
+  margin-bottom: 18px;
+}
+
+.section-heading h3 {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.section-heading p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+/* Table section heading — split layout with Add Record on the right */
+.table-section__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.table-section__heading .primary-button {
+  flex-shrink: 0;
+  align-self: center;
+  height: 38px;
+  padding: 0 24px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.table-section__heading .danger-button {
+  flex-shrink: 0;
+  align-self: center;
+  height: 38px;
+  padding: 0 24px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}

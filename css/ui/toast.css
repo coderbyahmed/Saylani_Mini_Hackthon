@@ -1,0 +1,519 @@
+/* ============================================================
+   TOAST NOTIFICATION SYSTEM
+   Reusable across all pages — Signup, Login, Dashboard, CRUD.
+   No external dependencies. Pure CSS animations.
+   ============================================================ */
+
+/* ============================================================
+   ROOT VARIABLES
+   ============================================================ */
+:root {
+  --toast-bg: #ffffff;
+  --toast-text: #0f172a;
+  --toast-muted: #64748b;
+  --toast-shadow: 0 12px 40px -8px rgba(15, 23, 42, 0.2), 0 4px 12px rgba(15, 23, 42, 0.08);
+  --toast-radius: 12px;
+  --toast-font: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --toast-z: 9999;
+  --toast-width: 380px;
+  --toast-gap: 12px;
+  --toast-border: #e2e8f0;
+
+  --toast-success: #10b981;
+  --toast-success-bg: #f0fdf4;
+  --toast-success-light: #d1fae5;
+
+  --toast-error: #ef4444;
+  --toast-error-bg: #fef2f2;
+  --toast-error-light: #fee2e2;
+
+  --toast-warning: #f59e0b;
+  --toast-warning-bg: #fffbeb;
+  --toast-warning-light: #fef3c7;
+
+  --toast-info: #3b82f6;
+  --toast-info-bg: #eff6ff;
+  --toast-info-light: #dbeafe;
+}
+
+/* ============================================================
+   TOAST CONTAINER
+   Fixed to top-right, stacks toasts vertically
+   ============================================================ */
+.toast-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  /* Hardcoded max z-index to stay above all stacking contexts
+     (form uses position: relative; z-index: 1; backdrop-filter: blur(18px)) */
+  z-index: 2147483647;
+  display: flex;
+  flex-direction: column;
+  gap: var(--toast-gap);
+  pointer-events: none;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.toast-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.toast-container::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 999px;
+}
+
+/* ============================================================
+   TOAST CARD
+   Glass-style base card shared by all types
+   ============================================================ */
+.toast {
+  position: relative;
+  width: var(--toast-width);
+  padding: 14px 44px 14px 52px;
+  border-radius: var(--toast-radius);
+  background: var(--toast-bg);
+  box-shadow: var(--toast-shadow);
+  border-left: 4px solid var(--toast-border);
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  animation: toast-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  overflow: hidden;
+  /* Ensure toast stays fully opaque after animation completes.
+     Prevents edge cases where animation-fill-mode might not hold. */
+  opacity: 1;
+  visibility: visible;
+}
+
+.toast.removing {
+  animation: toast-out 0.3s cubic-bezier(0.55, 0, 1, 0.45) both;
+}
+
+.toast:hover {
+  box-shadow: 0 16px 48px -8px rgba(15, 23, 42, 0.25);
+}
+
+/* ============================================================
+   TOAST ICON (placed via ::before on the card)
+   ============================================================ */
+.toast::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: currentColor;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+/* ============================================================
+   TOAST TYPES
+   ============================================================ */
+
+/* --- Success --- */
+.toast--success {
+  border-left-color: var(--toast-success);
+  background: var(--toast-success-bg);
+}
+
+.toast--success::before {
+  background: var(--toast-success);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+}
+
+.toast--success .toast__progress {
+  background: var(--toast-success-light);
+}
+
+.toast--success .toast__progress::after {
+  background: var(--toast-success);
+}
+
+.toast--success .toast__close:hover {
+  background: var(--toast-success-light);
+}
+
+.toast--success .toast__close:hover::before,
+.toast--success .toast__close:hover::after {
+  background: var(--toast-success);
+}
+
+/* --- Error --- */
+.toast--error {
+  border-left-color: var(--toast-error);
+  background: var(--toast-error-bg);
+}
+
+.toast--error::before {
+  background: var(--toast-error);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E");
+}
+
+.toast--error .toast__progress {
+  background: var(--toast-error-light);
+}
+
+.toast--error .toast__progress::after {
+  background: var(--toast-error);
+}
+
+.toast--error .toast__close:hover {
+  background: var(--toast-error-light);
+}
+
+.toast--error .toast__close:hover::before,
+.toast--error .toast__close:hover::after {
+  background: var(--toast-error);
+}
+
+/* --- Warning --- */
+.toast--warning {
+  border-left-color: var(--toast-warning);
+  background: var(--toast-warning-bg);
+}
+
+.toast--warning::before {
+  background: var(--toast-warning);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z'/%3E%3Cline x1='12' y1='9' x2='12' y2='13'/%3E%3Cline x1='12' y1='17' x2='12.01' y2='17'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z'/%3E%3Cline x1='12' y1='9' x2='12' y2='13'/%3E%3Cline x1='12' y1='17' x2='12.01' y2='17'/%3E%3C/svg%3E");
+}
+
+.toast--warning .toast__progress {
+  background: var(--toast-warning-light);
+}
+
+.toast--warning .toast__progress::after {
+  background: var(--toast-warning);
+}
+
+.toast--warning .toast__close:hover {
+  background: var(--toast-warning-light);
+}
+
+.toast--warning .toast__close:hover::before,
+.toast--warning .toast__close:hover::after {
+  background: var(--toast-warning);
+}
+
+/* --- Info --- */
+.toast--info {
+  border-left-color: var(--toast-info);
+  background: var(--toast-info-bg);
+}
+
+.toast--info::before {
+  background: var(--toast-info);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' y1='16' x2='12' y2='12'/%3E%3Cline x1='12' y1='8' x2='12.01' y2='8'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' y1='16' x2='12' y2='12'/%3E%3Cline x1='12' y1='8' x2='12.01' y2='8'/%3E%3C/svg%3E");
+}
+
+.toast--info .toast__progress {
+  background: var(--toast-info-light);
+}
+
+.toast--info .toast__progress::after {
+  background: var(--toast-info);
+}
+
+.toast--info .toast__close:hover {
+  background: var(--toast-info-light);
+}
+
+.toast--info .toast__close:hover::before,
+.toast--info .toast__close:hover::after {
+  background: var(--toast-info);
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+.toast__title {
+  font-family: var(--toast-font);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--toast-text);
+  line-height: 1.4;
+  margin: 0 0 2px;
+}
+
+.toast__message {
+  font-family: var(--toast-font);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--toast-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ============================================================
+   CLOSE BUTTON
+   Circular hover effect, top-right of the toast card
+   ============================================================ */
+.toast__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+  padding: 0;
+}
+
+.toast__close::before,
+.toast__close::after {
+  content: "";
+  position: absolute;
+  width: 11px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--toast-muted);
+  transition: background 0.2s ease;
+}
+
+.toast__close::before {
+  transform: rotate(45deg);
+}
+
+.toast__close::after {
+  transform: rotate(-45deg);
+}
+
+.toast__close:hover {
+  background: var(--toast-border);
+}
+
+/* ============================================================
+   PROGRESS BAR
+   Animated bar at the bottom of every toast.
+   Width will be controlled by JavaScript.
+   ============================================================ */
+.toast__progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--toast-border);
+}
+
+.toast__progress::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--toast-muted);
+  animation: toast-progress 3s linear forwards;
+  transform-origin: left center;
+}
+
+.toast.removing .toast__progress::after {
+  animation-play-state: paused;
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+/* Slide In */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(120%) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Slide Out */
+@keyframes toast-out {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(120%) scale(0.92);
+  }
+}
+
+/* Progress Bar Shrink */
+@keyframes toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .toast-container {
+    top: 16px;
+    right: 16px;
+    gap: 10px;
+    max-height: calc(100vh - 32px);
+  }
+
+  .toast {
+    --toast-width: 340px;
+    width: var(--toast-width);
+    padding: 12px 40px 12px 46px;
+    border-radius: 10px;
+  }
+
+  .toast::before {
+    left: 14px;
+    top: 14px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .toast__title {
+    font-size: 13px;
+  }
+
+  .toast__message {
+    font-size: 12px;
+  }
+
+  .toast__close {
+    top: 8px;
+    right: 8px;
+    width: 22px;
+    height: 22px;
+  }
+
+  .toast__close::before,
+  .toast__close::after {
+    width: 10px;
+  }
+
+  .toast__progress {
+    height: 3px;
+  }
+}
+
+/* Large Mobile */
+@media (max-width: 480px) {
+  .toast-container {
+    top: 12px;
+    right: 12px;
+    left: 12px;
+    gap: 10px;
+    max-height: calc(100vh - 24px);
+  }
+
+  .toast {
+    --toast-width: 100%;
+    width: var(--toast-width);
+    padding: 12px 38px 12px 44px;
+    border-radius: 10px;
+  }
+
+  .toast::before {
+    left: 12px;
+    top: 13px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .toast__title {
+    font-size: 13px;
+  }
+
+  .toast__message {
+    font-size: 12px;
+  }
+
+  .toast__close {
+    top: 8px;
+    right: 8px;
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 360px) {
+  .toast-container {
+    top: 8px;
+    right: 8px;
+    left: 8px;
+    gap: 8px;
+  }
+
+  .toast {
+    padding: 10px 34px 10px 40px;
+    border-radius: 8px;
+  }
+
+  .toast::before {
+    left: 10px;
+    top: 11px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .toast__title {
+    font-size: 12px;
+  }
+
+  .toast__message {
+    font-size: 11px;
+  }
+
+  .toast__close {
+    top: 6px;
+    right: 6px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .toast__close::before,
+  .toast__close::after {
+    width: 9px;
+    height: 1.5px;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+
+  .toast.removing {
+    animation: none;
+  }
+
+  .toast__progress::after {
+    animation: none;
+  }
+}

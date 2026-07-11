@@ -1,0 +1,269 @@
+/* ============================================================
+   LOADING OVERLAY — FULLSCREEN SPINNER
+   Reusable across all pages — Signup, Login, Dashboard, CRUD,
+   Firebase requests, file uploads, and future features.
+   Pure CSS. No external dependencies.
+   ============================================================ */
+
+/* ============================================================
+   ROOT VARIABLES
+   ============================================================ */
+:root {
+  --loader-overlay: rgba(15, 23, 42, 0.55);
+  --loader-spinner: #6366f1;
+  --loader-spinner-track: rgba(99, 102, 241, 0.15);
+  --loader-text: #f1f5f9;
+  --loader-font: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --loader-z: 99999;
+  --loader-size: 44px;
+  --loader-border: 4px;
+  --loader-duration: 0.8s;
+}
+
+/* ============================================================
+   OVERLAY
+   Fullscreen fixed overlay with backdrop blur.
+   Hidden by default — toggle via .loader--active class.
+   ============================================================ */
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: var(--loader-z);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--loader-overlay);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  pointer-events: none;
+}
+
+.loader--active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+
+/* ============================================================
+   SPINNER
+   Circular rotating ring. Default medium size.
+   ============================================================ */
+.loader__spinner {
+  width: var(--loader-size);
+  height: var(--loader-size);
+  border: var(--loader-border) solid var(--loader-spinner-track);
+  border-top-color: var(--loader-spinner);
+  border-radius: 50%;
+  animation: loader-rotate var(--loader-duration) linear infinite;
+  will-change: transform;
+}
+
+/* ============================================================
+   LOADER TEXT
+   Optional text displayed below the spinner.
+   ============================================================ */
+.loader__text {
+  font-family: var(--loader-font);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--loader-text);
+  letter-spacing: 0.02em;
+  text-align: center;
+  margin: 0;
+}
+
+/* ============================================================
+   SIZE VARIANTS
+   ============================================================ */
+
+/* Small */
+.loader--sm .loader__spinner {
+  --loader-size: 24px;
+  --loader-border: 3px;
+}
+
+.loader--sm .loader__text {
+  font-size: 12px;
+}
+
+/* Medium (default — same as base) */
+.loader--md .loader__spinner {
+  --loader-size: 44px;
+  --loader-border: 4px;
+}
+
+.loader--md .loader__text {
+  font-size: 15px;
+}
+
+/* Large */
+.loader--lg .loader__spinner {
+  --loader-size: 60px;
+  --loader-border: 5px;
+}
+
+.loader--lg .loader__text {
+  font-size: 17px;
+}
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+@keyframes loader-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* Desktop (no changes needed — default works perfectly) */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .loader {
+    gap: 14px;
+  }
+
+  .loader__spinner {
+    --loader-size: 40px;
+    --loader-border: 4px;
+  }
+
+  .loader__text {
+    font-size: 14px;
+  }
+
+  .loader--sm .loader__spinner {
+    --loader-size: 22px;
+    --loader-border: 3px;
+  }
+
+  .loader--sm .loader__text {
+    font-size: 11px;
+  }
+
+  .loader--md .loader__spinner {
+    --loader-size: 40px;
+    --loader-border: 4px;
+  }
+
+  .loader--md .loader__text {
+    font-size: 14px;
+  }
+
+  .loader--lg .loader__spinner {
+    --loader-size: 54px;
+    --loader-border: 5px;
+  }
+
+  .loader--lg .loader__text {
+    font-size: 16px;
+  }
+}
+
+/* Large Mobile */
+@media (max-width: 480px) {
+  .loader {
+    gap: 12px;
+  }
+
+  .loader__spinner {
+    --loader-size: 36px;
+    --loader-border: 3px;
+  }
+
+  .loader__text {
+    font-size: 13px;
+  }
+
+  .loader--sm .loader__spinner {
+    --loader-size: 20px;
+    --loader-border: 2px;
+  }
+
+  .loader--sm .loader__text {
+    font-size: 11px;
+  }
+
+  .loader--md .loader__spinner {
+    --loader-size: 36px;
+    --loader-border: 3px;
+  }
+
+  .loader--md .loader__text {
+    font-size: 13px;
+  }
+
+  .loader--lg .loader__spinner {
+    --loader-size: 48px;
+    --loader-border: 4px;
+  }
+
+  .loader--lg .loader__text {
+    font-size: 15px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 360px) {
+  .loader {
+    gap: 10px;
+  }
+
+  .loader__spinner {
+    --loader-size: 32px;
+    --loader-border: 3px;
+  }
+
+  .loader__text {
+    font-size: 12px;
+  }
+
+  .loader--sm .loader__spinner {
+    --loader-size: 18px;
+    --loader-border: 2px;
+  }
+
+  .loader--sm .loader__text {
+    font-size: 10px;
+  }
+
+  .loader--md .loader__spinner {
+    --loader-size: 32px;
+    --loader-border: 3px;
+  }
+
+  .loader--md .loader__text {
+    font-size: 12px;
+  }
+
+  .loader--lg .loader__spinner {
+    --loader-size: 44px;
+    --loader-border: 4px;
+  }
+
+  .loader--lg .loader__text {
+    font-size: 14px;
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY — REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .loader__spinner {
+    animation: none;
+    border-top-color: var(--loader-spinner);
+  }
+}

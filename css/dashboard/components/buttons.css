@@ -1,0 +1,27 @@
+.primary-button {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--text-inverse);
+  border: none;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+  transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+}
+
+.primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+  opacity: 0.95;
+}
+
+.danger-button {
+  background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+  color: var(--text-inverse);
+  border: none;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+  transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+}
+
+.danger-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+  opacity: 0.95;
+}

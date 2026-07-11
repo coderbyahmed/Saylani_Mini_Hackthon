@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Reusable admin dashboard template" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../../css/dashboard/dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Sidebar width — compact professional layout */
+        :root {
+            --sidebar-width: 220px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============================================================
+         PAGE WRAPPER
+    ============================================================ -->
+    <div class="dashboard-shell">
+
+        <!-- ============================================================
+             SIDEBAR
+             Update nav-link active class to highlight the current page.
+             href="records.html" links to the standalone Records page.
+        ============================================================ -->
+        <aside class="sidebar" aria-label="Sidebar navigation">
+
+            <div class="sidebar-brand" role="banner">
+                <!-- Row 1: Logo -->
+                <!-- <div class="brand-mark" aria-hidden="true">A</div> -->
+
+                <!-- Row 2: Title (left) + Toggle (right) -->
+                <div class="brand-bottom">
+                    <div class="brand-text">
+                        <h1>Admin Panel</h1>
+                        <p>CRUD Workspace</p>
+                    </div>
+                    <button type="button" class="sidebar-toggle" aria-label="Toggle sidebar" title="Toggle sidebar">
+                        <span aria-hidden="true">☰</span>
+                    </button>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Primary navigation">
+                <ul>
+                    <li>
+                        <a href="dashboard.html" aria-current="page" class="nav-link active" title="Dashboard">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../records/records.html" class="nav-link" title="Records">
+                            <i class="fas fa-database" aria-hidden="true"></i>
+                            <span>Records</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link" title="Profile">
+                            <i class="fas fa-user" aria-hidden="true"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link" title="Settings">
+                            <i class="fas fa-cog" aria-hidden="true"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+
+                    <!-- ============================================================
+                         FUTURE NAV ITEMS (commented out)
+                         Uncomment and update href for additional pages.
+                         Uses generic labels for any CRUD project.
+                    ============================================================ -->
+                    <!--
+                    <li>
+                        <a href="#" class="nav-link">
+                            <span aria-hidden="true">◌</span>
+                            <span>Users</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link">
+                            <span aria-hidden="true">◌</span>
+                            <span>Products</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link">
+                            <span aria-hidden="true">◌</span>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link">
+                            <span aria-hidden="true">◌</span>
+                            <span>Analytics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link">
+                            <span aria-hidden="true">◌</span>
+                            <span>Inventory</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link">
+                            <span aria-hidden="true">◌</span>
+                            <span>Departments</span>
+                        </a>
+                    </li>
+                    -->
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button type="button" class="logout-button" title="Logout">
+                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ============================================================
+             MAIN CONTENT
+        ============================================================ -->
+        <main class="main-content" id="main-content">
+
+            <!-- ============================================================
+                 HEADER / NAVBAR
+                 Shared across all pages (Dashboard, Records, etc.)
+            ============================================================ -->
+            <header class="topbar" role="banner">
+                <div class="page-heading">
+                    <div class="brand-block">
+                        <div class="brand-mark" aria-hidden="true">A</div>
+                        <div>
+                            <h2>Admin Dashboard</h2>
+                            <p>Reusable CRUD Template</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topbar-actions">
+
+                    <!-- ============================================================
+                         THEME TOGGLE
+                         JS functionality will be implemented later
+                    ============================================================ -->
+                    <button type="button" class="icon-button theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="3" y2="12"/>
+                            <line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                    </button>
+
+                    <!-- ============================================================
+                         NOTIFICATION BELL
+                         Dynamically rendered by dashboardNotification.js.
+                    ============================================================ -->
+                    <div class="notification-wrapper">
+                        <button type="button" class="icon-button notification-trigger" aria-label="Notifications" aria-haspopup="true" aria-expanded="false">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                            </svg>
+                            <span class="notification-badge" aria-hidden="true" hidden>0</span>
+                        </button>
+
+                        <div class="notification-dropdown" role="menu" aria-label="Notifications">
+                            <div class="notification-header">
+                                <span class="notification-title">Notifications</span>
+                                <span class="notification-count">0 new</span>
+                            </div>
+
+                            <div class="notification-body"></div>
+
+                            <div class="notification-empty" hidden>
+                                <p>No Notifications Yet</p>
+                                <p>You're all caught up.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-menu">
+                        <button type="button" class="profile-trigger" aria-haspopup="menu" aria-expanded="false">
+                            <span class="avatar" id="headerAvatar" aria-hidden="true">AD</span>
+                            <img class="avatar-img" id="headerAvatarImg" src="" alt="" hidden>
+                            <span class="profile-name" id="headerProfileName">Admin User</span>
+                            <span class="dropdown-chevron" aria-hidden="true">▾</span>
+                        </button>
+
+                        <div class="profile-dropdown" role="menu" aria-label="Profile actions">
+                            <a href="#" role="menuitem">My Profile</a>
+                            <a href="#" role="menuitem">Change Password</a>
+                            <a href="#" role="menuitem">Logout</a>
+
+                            <!-- ============================================================
+                                 FUTURE DROPDOWN ITEMS (commented out)
+                            ============================================================ -->
+                            <!--
+                            <a href="#" role="menuitem">Security</a>
+                            <a href="#" role="menuitem">Billing</a>
+                            <a href="#" role="menuitem">Activity Log</a>
+                            -->
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ============================================================
+                 WELCOME / ADMIN INFORMATION
+                 Displays a greeting and quick summary for the logged-in user.
+            ============================================================ -->
+            <section class="welcome-section" aria-labelledby="welcome-heading">
+                <div class="welcome-card">
+                    <div class="welcome-content">
+                        <h2 id="welcome-heading">Welcome back, Admin</h2>
+                        <p>Here's what's happening with your records today. Use the navigation or quick links below to manage your data.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 DASHBOARD STATISTICS
+                 Core metrics displayed as themed stat cards.
+                 Replace the sample values with live data in production.
+            ============================================================ -->
+            <section class="stats-section" aria-labelledby="stats-heading">
+                <div class="section-heading">
+                    <h3 id="stats-heading">Overview</h3>
+                    <p>Core metrics for your admin workspace.</p>
+                </div>
+
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <p class="stat-label">Total Records</p>
+                        <h4 class="stat-value" id="cardTotalRecords">—</h4>
+                        <p class="stat-meta">Total records in the system</p>
+                    </article>
+
+                    <article class="stat-card">
+                        <p class="stat-label">Active Records</p>
+                        <h4 class="stat-value" id="cardActiveRecords">—</h4>
+                        <p class="stat-meta">Currently live</p>
+                    </article>
+
+                    <article class="stat-card">
+                        <p class="stat-label">Pending Records</p>
+                        <h4 class="stat-value" id="cardPendingRecords">—</h4>
+                        <p class="stat-meta">Awaiting review</p>
+                    </article>
+
+                    <article class="stat-card">
+                        <p class="stat-label">Archived Records</p>
+                        <h4 class="stat-value" id="cardArchivedRecords">—</h4>
+                        <p class="stat-meta">Stored safely</p>
+                    </article>
+
+                    <!-- ============================================================
+                         FUTURE STAT CARDS (commented out)
+                         Uncomment to add additional metrics.
+                    ============================================================ -->
+                    <!--
+                    <article class="stat-card">
+                        <p class="stat-label">Pending Approvals</p>
+                        <h4 class="stat-value">18</h4>
+                        <p class="stat-meta">Needs attention</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">Recent Activity</p>
+                        <h4 class="stat-value">320</h4>
+                        <p class="stat-meta">Live now</p>
+                    </article>
+                    -->
+                </div>
+            </section>
+            <!-- ============================================================
+                 RECENT ACTIVITY
+                 Chronological list of recent actions in the workspace.
+                 Populated dynamically by dashboardRecentActivity.js.
+            ============================================================ -->
+            <section class="activity-section" aria-labelledby="activity-heading">
+                <div class="section-heading table-section__heading">
+                    <div>
+                        <h3 id="activity-heading">Recent Activity</h3>
+                        <p>Latest actions performed in the system</p>
+                    </div>
+                    <button type="button" class="danger-button" id="deleteAllActivitiesBtn" hidden>Delete All</button>
+                </div>
+
+                <div class="table-wrapper">
+
+                    <!-- ============================================================
+                         LOADING STATE
+                         Centered spinner while fetching activities.
+                    ============================================================ -->
+                    <div class="table-loader" id="activityLoader">
+                        <div class="table-loader__spinner"></div>
+                        <p class="table-loader__text">Loading activities...</p>
+                    </div>
+
+                    <!-- ============================================================
+                         ACTIVITY TABLE
+                    ============================================================ -->
+                    <table id="activityTable" hidden>
+                        <caption class="sr-only">Recent activity log</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Activity</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Date &amp; Time</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activityBody">
+                        </tbody>
+                    </table>
+
+                    <!-- ============================================================
+                         EMPTY STATE
+                         Shown when no activities exist.
+                    ============================================================ -->
+                    <div class="empty-state" id="activityEmpty" hidden>
+                        <h3>No recent activity</h3>
+                        <p>No recent activity available.</p>
+                    </div>
+
+                </div>
+
+                <!-- ============================================================
+                     ACTIVITY PAGINATION (UI only — logic not yet implemented)
+                     Reuses the same .pagination design as the Records page.
+                ============================================================ -->
+                <nav class="pagination" aria-label="Activity pagination" id="activityPagination" hidden>
+                    <button type="button" id="activityPrev" disabled aria-disabled="true">Previous</button>
+                    <ul id="activityPageList"></ul>
+                    <button type="button" id="activityNext">Next</button>
+                </nav>
+            </section>
+            </main>
+
+        <!-- ============================================================
+             ACTIVITY DELETE CONFIRMATION MODAL (UI only)
+             Compact confirmation dialog — functionality will be added later.
+        ============================================================ -->
+        <div id="deleteActivityModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="delete-activity-modal-title" hidden>
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h3 id="delete-activity-modal-title">Delete Activity</h3>
+                    <button type="button" class="profile-modal-close" aria-label="Close delete activity modal">&times;</button>
+                </header>
+
+                <div class="delete-confirmation">
+                    <div class="warning-icon" aria-hidden="true">&#9888;</div>
+                    <p>Are you sure you want to delete this activity? This action cannot be undone.</p>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button">Cancel</button>
+                    <button type="button" class="danger-button">Delete Activity</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             PROFILE MODAL
+             Displays the currently logged-in user's profile information.
+        ============================================================ -->
+        <div id="profileModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title" hidden>
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h3 id="profile-modal-title">My Profile</h3>
+                    <button type="button" class="profile-modal-close" aria-label="Close profile modal">&times;</button>
+                </header>
+
+                <div class="profile-modal-body" id="profileModalBody">
+
+                    <div class="profile-avatar-section">
+                        <div class="profile-avatar" id="profileAvatar">
+                            <span class="profile-avatar-initials" id="profileAvatarInitials">?</span>
+                        </div>
+                        <img id="profileAvatarImg" class="profile-avatar-img" src="" alt="Profile photo" hidden />
+                    </div>
+
+                    <div class="profile-details">
+                        <div class="profile-field">
+                            <span class="profile-label">Full Name</span>
+                            <span class="profile-value" id="profileFullName">&mdash;</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="profile-label">Email Address</span>
+                            <span class="profile-value" id="profileEmail">&mdash;</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="profile-label">Authentication Provider</span>
+                            <span class="profile-value" id="profileProvider">&mdash;</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="profile-label">Account Created</span>
+                            <span class="profile-value" id="profileCreated">&mdash;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="profile-modal-close">Close</button>
+                    <button type="button" class="primary-button" id="editProfileBtn">Edit Profile</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             EDIT PROFILE MODAL
+             Allows the user to update their profile image and full name.
+        ============================================================ -->
+        <div id="editProfileModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="edit-profile-modal-title" hidden>
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h3 id="edit-profile-modal-title">Edit Profile</h3>
+                    <button type="button" class="edit-profile-modal-close" aria-label="Close edit profile modal">&times;</button>
+                </header>
+
+                <form id="editProfileForm">
+                    <div class="edit-form-body">
+                        <!-- Profile Image -->
+                        <div class="edit-profile-image-section">
+                            <div class="edit-profile-image-wrapper" id="editProfileImageWrapper">
+                                <div class="edit-profile-avatar" id="editProfileAvatar">
+                                    <span class="edit-profile-avatar-initials" id="editProfileAvatarInitials">?</span>
+                                </div>
+                                <img id="editProfileAvatarImg" class="edit-profile-avatar-img" src="" alt="Profile photo" hidden />
+                                <div class="edit-profile-image-overlay" id="editProfileImageOverlay">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                                        <circle cx="12" cy="13" r="4"/>
+                                    </svg>
+                                </div>
+                                <input type="file" id="editProfileImageInput" accept="image/jpeg,image/png,image/webp" hidden />
+                            </div>
+                            <p class="edit-profile-image-hint">Click to change profile image</p>
+                        </div>
+
+                        <!-- Full Name -->
+                        <div class="form-group">
+                            <label for="editProfileFullName">Full Name</label>
+                            <input type="text" id="editProfileFullName" class="form-input" required />
+                        </div>
+
+                        <!-- Email (read-only) -->
+                        <div class="form-group">
+                            <label for="editProfileEmail">Email Address</label>
+                            <input type="email" id="editProfileEmail" class="form-input" readonly />
+                        </div>
+
+                        <!-- Provider (read-only) -->
+                        <div class="form-group">
+                            <label for="editProfileProvider">Authentication Provider</label>
+                            <input type="text" id="editProfileProvider" class="form-input" readonly />
+                        </div>
+
+                        <!-- Created Date (read-only) -->
+                        <div class="form-group">
+                            <label for="editProfileCreated">Account Created</label>
+                            <input type="text" id="editProfileCreated" class="form-input" readonly />
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="edit-profile-modal-close">Cancel</button>
+                        <button type="submit" class="primary-button" id="saveProfileBtn">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             CHANGE PASSWORD MODAL
+             Allows the user to update their account password securely.
+        ============================================================ -->
+        <div id="changePasswordModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="change-password-modal-title" hidden>
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h3 id="change-password-modal-title">Change Password</h3>
+                    <button type="button" class="change-password-modal-close" aria-label="Close change password modal">&times;</button>
+                </header>
+
+                <form id="changePasswordForm">
+                    <div class="change-password-body">
+                        <p class="change-password-description">Update your account password securely.</p>
+
+                        <div class="form-group">
+                            <label for="currentPassword">Current Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="currentPassword" class="form-input" placeholder="Enter current password" autocomplete="current-password" />
+                                <button type="button" class="eye-toggle" aria-label="Toggle password visibility"></button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="newPassword" class="form-input" placeholder="Enter new password" autocomplete="new-password" />
+                                <button type="button" class="eye-toggle" aria-label="Toggle password visibility"></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="change-password-modal-close">Cancel</button>
+                        <button type="submit" class="primary-button" id="savePasswordBtn">Save Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+<script type="module" src="../../js/dashboard/dashboard.js"></script>
+</body>
+
+</html>

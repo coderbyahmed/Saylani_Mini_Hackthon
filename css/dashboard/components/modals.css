@@ -1,0 +1,808 @@
+.modals {
+  position: relative;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-slow), visibility var(--transition-slow);
+}
+
+.modal:not([hidden]) {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius-xl);
+  width: 520px;
+  max-width: 95vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  transform: scale(0.94) translateY(16px);
+  transition: transform var(--transition-slow);
+}
+
+.modal:not([hidden]) .modal-content {
+  transform: scale(1) translateY(0);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.8), transparent);
+  flex-shrink: 0;
+}
+
+.modal-header h3 {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.modal-header button {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--text-muted);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  transition: background var(--transition), color var(--transition), transform var(--transition);
+}
+
+.modal-header button:hover {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-color: rgba(239, 68, 68, 0.3);
+  transform: rotate(90deg);
+}
+
+.modal-content form {
+  padding: 10px 20px 0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px 20px;
+  border-top: 1px solid var(--border);
+  background: linear-gradient(180deg, transparent, rgba(248, 250, 252, 0.6));
+  flex-shrink: 0;
+}
+
+.modal-actions button {
+  padding: 7px 18px;
+  font-size: 12.5px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text);
+  transition: transform var(--transition), background var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.modal-actions button:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+  transform: translateY(-1px);
+}
+
+.modal-actions .primary-button {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--text-inverse);
+  border: none;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+}
+
+.modal-actions .primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+  opacity: 0.95;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--text-inverse);
+}
+
+.modal-actions .danger-button,
+.modal-actions .danger-button {
+  border: none;
+}
+
+.modal-actions .danger-button:hover {
+  color: var(--text-inverse);
+  background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+}
+
+#profileModal .modal-content {
+  width: 380px;
+}
+
+.profile-modal-body {
+  padding: 24px 24px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--pink));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+}
+
+.profile-avatar-initials {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text-inverse);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.profile-avatar-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+}
+
+.profile-details {
+  width: 100%;
+}
+
+.profile-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+}
+
+.profile-field:nth-child(even) {
+  background: var(--bg-input);
+}
+
+.profile-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.profile-value {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: right;
+  max-width: 55%;
+  word-break: break-word;
+}
+
+.view-record-layout {
+  display: flex;
+  gap: 28px;
+  padding: 24px;
+}
+
+.record-preview {
+  text-align: center;
+  flex-shrink: 0;
+  width: 150px;
+  padding: 20px 16px;
+  background: linear-gradient(135deg, var(--primary-light), var(--purple-bg));
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+.preview-image {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--pink));
+  color: var(--text-inverse);
+  font-size: 24px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+}
+
+.record-preview h4 {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.record-preview p {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.record-details {
+  flex: 1;
+}
+
+.record-details dl {
+  display: grid;
+  gap: 14px;
+}
+
+.record-details dl>div {
+  padding: 12px 14px;
+  background: var(--bg-input);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.record-details dl>div:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: var(--shadow-xs);
+}
+
+.record-details dt {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 3px;
+}
+
+.record-details dd {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.delete-confirmation {
+  text-align: center;
+  padding: 28px 24px 8px;
+}
+
+.warning-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  background: var(--warning-bg);
+  border: 2px solid rgba(245, 158, 11, 0.3);
+  border-radius: 50%;
+  color: var(--warning-dark);
+}
+
+.delete-confirmation p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.65;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* ------------------------------------------------------------
+   VIEW RECORD MODAL
+   ------------------------------------------------------------ */
+
+/* Scrollable body — fills remaining space between header/footer */
+.view-modal-body {
+  padding: 20px 20px 4px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Loading spinner inside modal (centered) */
+.view-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 64px 28px;
+}
+
+/* Profile section — avatar, name, badge */
+.view-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.view-profile-avatar {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--pink));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+}
+
+.view-avatar-initials {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text-inverse);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.view-avatar-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.view-profile-name {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* Info table — professional profile-style rows */
+.view-info-table {
+  padding-bottom: 8px;
+}
+
+.view-info-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.view-info-table tr {
+  border-bottom: 1px solid var(--border);
+}
+
+.view-info-table tr:last-child {
+  border-bottom: none;
+}
+
+.view-info-table td {
+  padding: 11px 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.view-table-label {
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 11px;
+  width: 130px;
+  vertical-align: top;
+  padding-right: 16px;
+}
+
+.view-table-value {
+  font-weight: 500;
+  color: var(--text);
+  word-break: break-word;
+}
+
+/* View modal — narrower width to match compact content */
+#viewRecordModal .modal-content {
+  width: 440px;
+}
+
+/* ------------------------------------------------------------
+   EDIT RECORD MODAL
+   ------------------------------------------------------------ */
+
+/* Narrower width — same as view modal */
+#editRecordModal .modal-content {
+  width: 440px;
+}
+
+/* Loading spinner inside modal (centered) */
+.edit-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 64px 28px;
+  flex: 1;
+}
+
+/* Form fills remaining space, body scrolls, footer stays fixed */
+#editRecordForm {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.edit-form-body {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 12px 20px 0;
+}
+
+/* Remove form padding override for edit */
+#editRecordForm.form {
+  padding: 0;
+}
+
+/* ------------------------------------------------------------
+   DELETE CONFIRMATION MODAL
+   Compact, centered confirmation dialog — not a form.
+   ------------------------------------------------------------ */
+
+#deleteRecordModal .modal-content {
+  width: 380px;
+}
+
+/* Minimal header — no gradient, no border, title sits closer to content */
+#deleteRecordModal .modal-header {
+  background: none;
+  border-bottom: none;
+  padding: 18px 20px 0;
+}
+
+/* Body — tighter padding, centered */
+#deleteRecordModal .delete-confirmation {
+  padding: 12px 20px 8px;
+}
+
+/* Smaller warning icon */
+#deleteRecordModal .warning-icon {
+  width: 48px;
+  height: 48px;
+  font-size: 24px;
+  margin: 0 auto 10px;
+}
+
+/* Message text — narrower width for readability */
+#deleteRecordModal .delete-confirmation p {
+  font-size: 13px;
+  max-width: 300px;
+}
+
+/* Footer — compact, buttons stay right-aligned */
+#deleteRecordModal .modal-actions {
+  padding: 8px 20px 18px;
+  border-top: none;
+  background: none;
+}
+
+/* Cancel button — matches the project primary blue style */
+#deleteRecordModal .modal-actions button[type="button"] {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--text-inverse);
+  border: none;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+}
+
+#deleteRecordModal .modal-actions button[type="button"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+  opacity: 0.95;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--text-inverse);
+}
+
+/* Delete button — always red with white text */
+#deleteRecordModal #deleteConfirmBtn {
+  background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+  color: var(--text-inverse);
+  border: none;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+}
+
+#deleteRecordModal #deleteConfirmBtn:hover {
+  background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+  color: var(--text-inverse);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.45);
+}
+
+/* ------------------------------------------------------------
+   EDIT PROFILE MODAL
+   ------------------------------------------------------------ */
+
+#editProfileModal .modal-content {
+  width: 420px;
+}
+
+#editProfileForm {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+#editProfileForm .edit-form-body {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 16px 20px 0;
+}
+
+#editProfileForm .edit-profile-image-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+#editProfileForm .edit-profile-image-wrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  cursor: pointer;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+#editProfileForm .edit-profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--pink));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+}
+
+#editProfileForm .edit-profile-avatar-initials {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-inverse);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+#editProfileForm .edit-profile-avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+#editProfileForm .edit-profile-image-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 3;
+  pointer-events: none;
+}
+
+#editProfileForm .edit-profile-image-wrapper:hover .edit-profile-image-overlay {
+  opacity: 1;
+}
+
+#editProfileForm .edit-profile-image-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+#editProfileForm .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+#editProfileForm .form-group label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-label);
+}
+
+#editProfileForm .form-group input {
+  height: 36px;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 400;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  color: var(--text);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+#editProfileForm .form-group input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--ring);
+  background: #fff;
+}
+
+#editProfileForm .form-group input[readonly] {
+  opacity: 0.65;
+  cursor: not-allowed;
+  background: var(--bg-table-stripe);
+}
+
+#editProfileForm .form-group input[readonly]:focus {
+  box-shadow: none;
+  border-color: var(--border);
+  background: var(--bg-table-stripe);
+}
+
+/* ------------------------------------------------------------
+   CHANGE PASSWORD MODAL
+   Compact password-update modal with show/hide toggle.
+   ------------------------------------------------------------ */
+#changePasswordModal .modal-content {
+  width: 380px;
+}
+
+#changePasswordForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.change-password-body {
+  padding: 16px 20px 8px;
+}
+
+.change-password-description {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin: 0 0 14px;
+  line-height: 1.5;
+}
+
+#changePasswordForm .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+#changePasswordForm .form-group label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-label);
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper .form-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 36px 0 10px;
+  font-size: 13px;
+  font-weight: 400;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  color: var(--text);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+.password-wrapper .form-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--ring);
+  background: #fff;
+}
+
+.password-wrapper .form-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.password-wrapper .eye-toggle {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.password-wrapper .eye-toggle:hover {
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.password-wrapper .eye-toggle::before {
+  content: "";
+  width: 16px;
+  height: 10px;
+  border: 2px solid var(--text-muted);
+  border-radius: 50% / 65%;
+}
+
+.password-wrapper .eye-toggle::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+
+.password-wrapper .eye-toggle:hover::before {
+  border-color: var(--primary-1);
+}
+
+.password-wrapper .eye-toggle:hover::after {
+  background: var(--primary-1);
+}
+
+.password-wrapper .eye-toggle--visible::before {
+  border-color: var(--primary-1);
+  background: rgba(99, 102, 241, 0.06);
+}

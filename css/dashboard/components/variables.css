@@ -1,0 +1,80 @@
+:root {
+  --bg-body: #eef2ff;
+  --bg-body-accent: #f5f3ff;
+  --bg-sidebar: linear-gradient(180deg, #1e1b4b 0%, #312e81 55%, #1e1b4b 100%);
+  --bg-sidebar-glass: rgba(255, 255, 255, 0.04);
+  --bg-sidebar-hover: rgba(255, 255, 255, 0.08);
+  --bg-sidebar-active: rgba(99, 102, 241, 0.22);
+  --bg-topbar: rgba(255, 255, 255, 0.82);
+  --bg-card: rgba(255, 255, 255, 0.92);
+  --bg-input: #f8fafc;
+  --bg-table-stripe: #f8fafc;
+  --bg-table-hover: #eef2ff;
+
+  --text: #0f172a;
+  --text-inverse: #ffffff;
+  --text-muted: #64748b;
+  --text-sidebar: #c7d2fe;
+  --text-sidebar-active: #ffffff;
+  --text-label: #334155;
+
+  --border: #e2e8f0;
+  --border-light: rgba(255, 255, 255, 0.08);
+  --border-focus: #6366f1;
+
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --secondary: #8b5cf6;
+  --success: #10b981;
+  --success-dark: #059669;
+  --warning: #f59e0b;
+  --warning-dark: #d97706;
+  --danger: #ef4444;
+  --danger-dark: #dc2626;
+  --info: #3b82f6;
+  --info-dark: #2563eb;
+  --purple: #a855f7;
+  --pink: #ec4899;
+  --orange: #f97316;
+  --cyan: #06b6d4;
+
+  --success-bg: #ecfdf5;
+  --warning-bg: #fffbeb;
+  --danger-bg: #fef2f2;
+  --info-bg: #eff6ff;
+  --purple-bg: #faf5ff;
+  --pink-bg: #fdf2f8;
+  --orange-bg: #fff7ed;
+  --cyan-bg: #ecfeff;
+  --gray-bg: #f1f5f9;
+
+  --primary-light: rgba(99, 102, 241, 0.1);
+  --ring: rgba(99, 102, 241, 0.2);
+
+  --stat-blue: #3b82f6;
+  --stat-blue-bg: linear-gradient(135deg, #eff6ff, #dbeafe);
+  --stat-green: #10b981;
+  --stat-green-bg: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  --stat-orange: #f97316;
+  --stat-orange-bg: linear-gradient(135deg, #fff7ed, #ffedd5);
+  --stat-purple: #8b5cf6;
+  --stat-purple-bg: linear-gradient(135deg, #faf5ff, #ede9fe);
+
+  --sidebar-width: 220px;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+  --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.12);
+  --shadow-sidebar: 4px 0 24px rgba(30, 27, 75, 0.18);
+  --shadow-card-hover: 0 12px 32px rgba(15, 23, 42, 0.12);
+
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --font: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
