@@ -35,12 +35,15 @@ const DELETE_ALL_BTN_SELECTOR = "#deleteAllActivitiesBtn";
 // ============================================================
 
 const ACTIVITY_CONFIG = {
-  record_added:      { icon: "fa-plus",              modifier: "create",  label: "Record Added" },
-  record_updated:    { icon: "fa-pen",               modifier: "update",  label: "Record Updated" },
-  record_deleted:    { icon: "fa-trash-can",         modifier: "delete",  label: "Record Deleted" },
+  record_added:      { icon: "fa-plus",              modifier: "create",  label: "Asset Added" },
+  record_updated:    { icon: "fa-pen",               modifier: "update",  label: "Asset Updated" },
+  record_deleted:    { icon: "fa-trash-can",         modifier: "delete",  label: "Asset Deleted" },
   status_changed:    { icon: "fa-arrow-right-arrow-left", modifier: "update", label: "Status Changed" },
   profile_updated:   { icon: "fa-user-pen",          modifier: "update",  label: "Profile Updated" },
   password_changed:  { icon: "fa-key",               modifier: "archive", label: "Password Changed" },
+  maintenance_started:    { icon: "fa-wrench",          modifier: "update",  label: "Maintenance Started" },
+  maintenance_updated:    { icon: "fa-screwdriver-wrench", modifier: "update",  label: "Maintenance Updated" },
+  maintenance_completed:  { icon: "fa-circle-check",    modifier: "create",  label: "Maintenance Completed" },
 };
 
 const DEFAULT_CONFIG = { icon: "fa-circle", modifier: "archive", label: "Activity" };
@@ -290,7 +293,7 @@ const refreshActivities = async () => {
 };
 
 // ============================================================
-// PRIVATE — HANDLE RECORD ADDED
+// PRIVATE — HANDLE ASSET ADDED
 // Logs a 'record_added' activity and refreshes.
 // Only fires when _skipNextRecordAdded is false (i.e. the
 // event did not originate from an edit operation).
@@ -300,7 +303,7 @@ const handleRecordAdded = async (e) => {
   const name = (e && e.detail && e.detail.name) || "";
   const description = name ? `${name} was added to the system.` : "";
   try {
-    await logActivity("record_added", "Record Added", description);
+    await logActivity("record_added", "Asset Added", description);
   } catch (error) {
     console.error("DashboardRecentActivity: log record_added failed —", error.message);
   }
@@ -309,7 +312,7 @@ const handleRecordAdded = async (e) => {
 };
 
 // ============================================================
-// PRIVATE — HANDLE RECORD UPDATED
+// PRIVATE — HANDLE ASSET UPDATED
 // Logs a 'record_updated' activity and refreshes.
 // ============================================================
 
@@ -324,9 +327,9 @@ const handleRecordUpdated = async (e) => {
       console.error("DashboardRecentActivity: log status_changed failed —", error.message);
     }
   } else {
-    const description = name ? `${name}'s record was updated.` : "";
+      const description = name ? `${name}'s asset was updated.` : "";
     try {
-      await logActivity("record_updated", "Record Updated", description);
+      await logActivity("record_updated", "Asset Updated", description);
     } catch (error) {
       console.error("DashboardRecentActivity: log record_updated failed —", error.message);
     }
@@ -336,7 +339,7 @@ const handleRecordUpdated = async (e) => {
 };
 
 // ============================================================
-// PRIVATE — HANDLE RECORD DELETED
+// PRIVATE — HANDLE ASSET DELETED
 // Logs a 'record_deleted' activity and refreshes.
 // ============================================================
 
@@ -344,7 +347,7 @@ const handleRecordDeleted = async (e) => {
   const name = (e && e.detail && e.detail.name) || "";
   const description = name ? `${name} was removed from the system.` : "";
   try {
-    await logActivity("record_deleted", "Record Deleted", description);
+    await logActivity("record_deleted", "Asset Deleted", description);
   } catch (error) {
     console.error("DashboardRecentActivity: log record_deleted failed —", error.message);
   }
@@ -480,12 +483,41 @@ const handleDeleteAllClick = () => {
   openDeleteAllModal();
 };
 
+const handleMaintenanceUpdate = async (e) => {
+  const action = (e && e.detail && e.detail.action) || "";
+  const assetName = (e && e.detail && e.detail.assetName) || "";
+  const status = (e && e.detail && e.detail.status) || "";
+
+  let activityType = "maintenance_updated";
+  let title = "Maintenance Updated";
+
+  if (status === "Resolved") {
+    activityType = "maintenance_completed";
+    title = "Maintenance Completed";
+  } else if (!action || action.toLowerCase().includes("start")) {
+    activityType = "maintenance_started";
+    title = "Maintenance Started";
+  }
+
+  const description = assetName
+    ? `${assetName} — ${action || title}`
+    : action || title;
+
+  try {
+    await logActivity(activityType, title, description);
+  } catch (error) {
+    console.error("DashboardRecentActivity: log maintenance failed —", error.message);
+  }
+
+  await refreshActivities();
+};
+
 // ============================================================
 // PRIVATE — SETUP EVENT LISTENERS
 // Hooks into existing custom events dispatched by the CRUD
 // modules. Uses a synchronous flag to deduplicate the
-// record-added event that editRecord fires after
-// record-updated.
+// asset-added event that editAsset fires after
+// asset-updated.
 // ============================================================
 
 const setupEventListeners = () => {
@@ -506,6 +538,8 @@ const setupEventListeners = () => {
     }
     handleRecordAdded(e);
   });
+
+  document.addEventListener("maintenance-updated", handleMaintenanceUpdate);
 
   // Delete modal event delegation
   document.addEventListener("click", handleActivityDeleteClick);

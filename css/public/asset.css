@@ -1,0 +1,319 @@
+:root {
+    --public-bg: #f6f8fb;
+    --public-panel: #ffffff;
+    --public-border: rgba(15, 23, 42, 0.08);
+    --public-label: #475569;
+    --public-muted: #64748b;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
+    color: var(--text);
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.public-shell {
+    width: min(1180px, 100%);
+    margin: 0 auto;
+    padding: 24px 20px 48px;
+}
+
+.public-main {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.public-intro {
+    background: var(--bg-card);
+    border: 1px solid var(--public-border);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    box-shadow: var(--shadow-sm);
+}
+
+.public-intro__content .eyebrow {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.public-intro__content h1 {
+    margin: 0;
+    font-size: clamp(2rem, 2.5vw, 2.4rem);
+    letter-spacing: -0.04em;
+}
+
+.public-intro__content p {
+    color: var(--text-muted);
+    max-width: 760px;
+    line-height: 1.75;
+    margin-top: 12px;
+}
+
+.asset-view-section,
+.report-issue-section {
+    display: grid;
+    gap: 24px;
+}
+
+.asset-card,
+.report-card,
+.empty-state {
+    background: var(--public-panel);
+    border: 1px solid var(--public-border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+}
+
+.asset-card {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.asset-card__media {
+    min-height: 320px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.asset-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.asset-image-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    text-align: center;
+    padding: 18px;
+}
+
+.asset-image-placeholder span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    border-radius: 20px;
+    background: rgba(99, 102, 241, 0.08);
+    color: var(--primary);
+    font-size: 1.8rem;
+}
+
+.asset-card__details {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.asset-card__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.asset-card__label,
+.asset-meta-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--public-label);
+    margin-bottom: 6px;
+}
+
+.asset-card__details h2,
+.report-card__header h2 {
+    margin: 0;
+    font-size: 1.75rem;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 108px;
+    padding: 9px 14px;
+    border-radius: 999px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-transform: capitalize;
+}
+
+.status-active {
+    background: rgba(16, 185, 129, 0.12);
+    color: #047857;
+}
+
+.status-pending {
+    background: rgba(249, 115, 22, 0.12);
+    color: #c2410c;
+}
+
+.status-inactive {
+    background: rgba(107, 114, 128, 0.12);
+    color: #374151;
+}
+
+.status-archived {
+    background: rgba(109, 40, 217, 0.12);
+    color: #6d28d9;
+}
+
+.asset-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.asset-meta-item p {
+    margin: 0;
+    color: var(--text);
+    font-size: 0.98rem;
+    line-height: 1.6;
+}
+
+.report-card {
+    padding: 24px;
+}
+
+.report-card__header {
+    margin-bottom: 22px;
+}
+
+.report-card__header .eyebrow {
+    margin-bottom: 10px;
+}
+
+.report-card__header p {
+    margin: 0;
+    color: var(--text-muted);
+    max-width: 680px;
+    line-height: 1.75;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.report-form-grid label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-label);
+    font-weight: 600;
+}
+
+.report-form-grid input,
+.report-form-grid textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-input);
+    color: var(--text);
+    font-size: 0.95rem;
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.report-form-grid input:focus,
+.report-form-grid textarea:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px var(--ring);
+}
+
+.report-form-grid textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.report-form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+.field-error {
+    min-height: 18px;
+    color: var(--danger);
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.report-actions {
+    margin-top: 18px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 28px;
+}
+
+.empty-state__icon {
+    font-size: 2.8rem;
+    margin-bottom: 18px;
+}
+
+.empty-state h2 {
+    margin: 0;
+    font-size: 1.9rem;
+}
+
+.empty-state p {
+    color: var(--text-muted);
+    margin: 14px auto 0;
+    max-width: 540px;
+    line-height: 1.75;
+}
+
+.empty-state .primary-button {
+    margin-top: 22px;
+}
+
+@media (max-width: 900px) {
+    .asset-card {
+        grid-template-columns: 1fr;
+    }
+
+    .asset-meta-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 680px) {
+    .public-shell {
+        padding: 20px 16px 36px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .asset-card__media {
+        min-height: 240px;
+    }
+}

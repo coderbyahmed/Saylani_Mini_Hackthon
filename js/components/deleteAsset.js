@@ -1,5 +1,5 @@
 // ============================================================
-// DELETE RECORD — UI CONTROLLER
+// DELETE ASSET — UI CONTROLLER
 // Responsibility: Open the Delete confirmation modal, handle
 // the confirm action, and delete the document through
 // dashboardService. No Firestore queries, no Cloudinary calls.
@@ -7,8 +7,7 @@
 
 import { showSuccessToast, showErrorToast } from "../ui/toast.js";
 import { showButtonLoader, hideButtonLoader } from "../ui/loader.js";
-import { deleteRecord as deleteRecordService } from "../dashboard/dashboardService.js";
-import { fetchRecordById } from "../dashboard/dashboardService.js";
+import { deleteAsset, fetchAssetById } from "../dashboard/dashboardService.js";
 
 // ============================================================
 // CONSTANTS
@@ -25,7 +24,7 @@ const TABLE_BODY_SELECTOR = "#recordsBody";
 
 let initialized = false;
 let isDeleting = false;
-let selectedRecordId = null;
+let selectedAssetId = null;
 
 // ============================================================
 // CACHED DOM REFERENCES
@@ -52,11 +51,11 @@ const cacheDOMRefs = () => {
 // PUBLIC — OPEN MODAL
 // ============================================================
 
-const openModal = (recordId) => {
+const openModal = (assetId) => {
   const { modal } = cacheDOMRefs();
-  if (!modal || !recordId) return;
+  if (!modal || !assetId) return;
 
-  selectedRecordId = recordId;
+  selectedAssetId = assetId;
   isDeleting = false;
 
   modal.hidden = false;
@@ -73,7 +72,7 @@ const closeModal = () => {
 
   modal.hidden = true;
   document.body.style.overflow = "";
-  selectedRecordId = null;
+  selectedAssetId = null;
   isDeleting = false;
 };
 
@@ -82,7 +81,7 @@ const closeModal = () => {
 // ============================================================
 
 const handleConfirmDelete = async () => {
-  if (isDeleting || !selectedRecordId) return;
+  if (isDeleting || !selectedAssetId) return;
 
   const { confirmBtn } = cacheDOMRefs();
 
@@ -90,38 +89,30 @@ const handleConfirmDelete = async () => {
   showButtonLoader(confirmBtn);
 
   try {
-
-    // Fetch record to get the name for activity logging
     let deletedName = "";
     try {
-      const record = await fetchRecordById(selectedRecordId);
-      if (record) deletedName = record.fullName || "";
+      const asset = await fetchAssetById(selectedAssetId);
+      if (asset) deletedName = asset.assetName || "";
     } catch (_) { /* best effort */ }
 
-    await deleteRecordService(selectedRecordId);
+    await deleteAsset(selectedAssetId);
 
-    showSuccessToast("Record deleted successfully.");
+    showSuccessToast("Asset deleted successfully.");
     closeModal();
     document.dispatchEvent(new CustomEvent("record-deleted", {
       detail: { name: deletedName }
     }));
     document.dispatchEvent(new CustomEvent("record-added"));
-
   } catch (error) {
-
-    showErrorToast(error.message || "Failed to delete record. Please try again.");
-
+    showErrorToast(error.message || "Failed to delete asset. Please try again.");
   } finally {
-
     isDeleting = false;
     hideButtonLoader(confirmBtn);
-
   }
 };
 
 // ============================================================
 // PRIVATE — HANDLE DELETE BUTTON CLICK
-// Uses event delegation on the table body.
 // ============================================================
 
 const handleDeleteClick = (e) => {
@@ -131,10 +122,10 @@ const handleDeleteClick = (e) => {
   const tr = btn.closest("tr");
   if (!tr) return;
 
-  const recordId = tr.dataset.recordId;
-  if (!recordId) return;
+  const assetId = tr.dataset.recordId;
+  if (!assetId) return;
 
-  openModal(recordId);
+  openModal(assetId);
 };
 
 // ============================================================
@@ -144,36 +135,30 @@ const handleDeleteClick = (e) => {
 const setupEventListeners = () => {
   const r = cacheDOMRefs();
 
-  // Close via × button
   if (r.closeBtn) {
     r.closeBtn.addEventListener("click", closeModal);
   }
 
-  // Close via Cancel button
   if (r.cancelBtn) {
     r.cancelBtn.addEventListener("click", closeModal);
   }
 
-  // Confirm delete
   if (r.confirmBtn) {
     r.confirmBtn.addEventListener("click", handleConfirmDelete);
   }
 
-  // Outside click on backdrop
   if (r.modal) {
     r.modal.addEventListener("click", (e) => {
       if (e.target === r.modal && !isDeleting) closeModal();
     });
   }
 
-  // Escape key
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && r.modal && !r.modal.hidden && !isDeleting) {
       closeModal();
     }
   });
 
-  // Delegate delete button clicks on the table body
   const tbody = document.querySelector(TABLE_BODY_SELECTOR);
   if (tbody) {
     tbody.addEventListener("click", handleDeleteClick);
@@ -184,7 +169,7 @@ const setupEventListeners = () => {
 // INIT
 // ============================================================
 
-const initDeleteRecord = () => {
+const initDeleteAsset = () => {
   if (initialized) return;
   initialized = true;
 
@@ -195,4 +180,4 @@ const initDeleteRecord = () => {
   setupEventListeners();
 };
 
-export { initDeleteRecord };
+export { initDeleteAsset };

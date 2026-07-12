@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Issue Management — manage issues submitted from public asset pages" />
+    <title>Issue Management</title>
+    <link rel="stylesheet" href="../../css/dashboard/dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --sidebar-width: 220px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-shell">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" aria-label="Sidebar navigation">
+            <div class="sidebar-brand" role="banner">
+                <div class="brand-bottom">
+                    <div class="brand-text">
+                        <h1>Admin Panel</h1>
+                        <p>Asset Maintenance</p>
+                    </div>
+                    <button type="button" class="sidebar-toggle" aria-label="Toggle sidebar" title="Toggle sidebar">
+                        <span aria-hidden="true">☰</span>
+                    </button>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Primary navigation">
+                <ul>
+                    <li>
+                        <a href="../dashboard/dashboard.html" class="nav-link" title="Dashboard">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../assets/assets.html" class="nav-link" title="Assets">
+                            <i class="fas fa-database" aria-hidden="true"></i>
+                            <span>Assets</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="issues.html" aria-current="page" class="nav-link active" title="Issue Management">
+                            <i class="fas fa-bug" aria-hidden="true"></i>
+                            <span>Issue Management</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../maintenance/maintenance.html" class="nav-link" title="Maintenance">
+                            <i class="fas fa-wrench" aria-hidden="true"></i>
+                            <span>Maintenance</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button type="button" class="logout-button" title="Logout">
+                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content" id="main-content">
+
+            <!-- HEADER / NAVBAR -->
+            <header class="topbar" role="banner">
+                <div class="page-heading">
+                    <div class="brand-block">
+                        <div class="brand-mark" aria-hidden="true">A</div>
+                        <div>
+                            <h2>Issue Management</h2>
+                            <p>Manage issues submitted from public asset pages</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button type="button" class="icon-button theme-toggle" aria-label="Toggle theme"
+                        title="Toggle theme">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="5" />
+                            <line x1="12" y1="1" x2="12" y2="3" />
+                            <line x1="12" y1="21" x2="12" y2="23" />
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                            <line x1="1" y1="12" x2="3" y2="12" />
+                            <line x1="21" y1="12" x2="23" y2="12" />
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                        </svg>
+                    </button>
+
+                    <div class="notification-wrapper">
+                        <button type="button" class="icon-button notification-trigger" aria-label="Notifications"
+                            aria-haspopup="true" aria-expanded="false">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                            </svg>
+                            <span class="notification-badge" aria-hidden="true" hidden>0</span>
+                        </button>
+
+                        <div class="notification-dropdown" role="menu" aria-label="Notifications">
+                            <div class="notification-header">
+                                <span class="notification-title">Notifications</span>
+                                <span class="notification-count">0 new</span>
+                            </div>
+                            <div class="notification-body"></div>
+                            <div class="notification-empty" hidden>
+                                <p>No Notifications Yet</p>
+                                <p>You're all caught up.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-menu">
+                        <button type="button" class="profile-trigger" aria-haspopup="menu" aria-expanded="false">
+                            <span class="avatar" id="headerAvatar" aria-hidden="true">AD</span>
+                            <img class="avatar-img" id="headerAvatarImg" src="" alt="" hidden>
+                            <span class="profile-name" id="headerProfileName">Admin User</span>
+                            <span class="dropdown-chevron" aria-hidden="true">▾</span>
+                        </button>
+                        <div class="profile-dropdown" role="menu" aria-label="Profile actions">
+                            <a href="#" role="menuitem">My Profile</a>
+                            <a href="#" role="menuitem">Change Password</a>
+                            <a href="#" role="menuitem">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ISSUE MANAGEMENT SECTION -->
+            <section class="activity-section" aria-labelledby="issue-heading">
+                <div class="section-heading table-section__heading">
+                    <div>
+                        <h3 id="issue-heading">Issue Management</h3>
+                        <p>Manage issue reports submitted from public asset pages</p>
+                    </div>
+                    <button type="button" class="primary-button" id="addIssueBtn">Add Issue</button>
+                </div>
+
+                <div class="issue-stats-grid">
+                    <article class="issue-stat-card">
+                        <p class="stat-label">Total Issues</p>
+                        <h4 class="stat-value" id="issueTotalCount">0</h4>
+                        <p class="stat-meta">All submitted issues</p>
+                    </article>
+                    <article class="issue-stat-card">
+                        <p class="stat-label">Open</p>
+                        <h4 class="stat-value" id="issueOpenCount">0</h4>
+                        <p class="stat-meta">Need attention</p>
+                    </article>
+                    <article class="issue-stat-card">
+                        <p class="stat-label">In Progress</p>
+                        <h4 class="stat-value" id="issueInProgressCount">0</h4>
+                        <p class="stat-meta">Currently being handled</p>
+                    </article>
+                    <article class="issue-stat-card">
+                        <p class="stat-label">Resolved</p>
+                        <h4 class="stat-value" id="issueResolvedCount">0</h4>
+                        <p class="stat-meta">Closed successfully</p>
+                    </article>
+                </div>
+
+                <div class="toolbar-section">
+                    <div class="toolbar">
+                        <div class="toolbar-search">
+                            <input type="text" id="issueSearch" placeholder="Search by issue, asset, reporter..." />
+                        </div>
+                        <div class="toolbar-field">
+                            <select id="issueStatusFilter">
+                                <option value="">All Status</option>
+                                <option value="open">Open</option>
+                                <option value="in progress">In Progress</option>
+                                <option value="resolved">Resolved</option>
+                                <option value="closed">Closed</option>
+                            </select>
+                        </div>
+                        <div class="toolbar-field">
+                            <select id="issuePriorityFilter">
+                                <option value="">All Priority</option>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="critical">Critical</option>
+                            </select>
+                        </div>
+                        <div class="toolbar-field">
+                            <select id="issueSort">
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                            </select>
+                        </div>
+                        <button type="button" id="issueRefreshBtn">Refresh</button>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <div class="table-loader" id="issueLoader">
+                        <div class="table-loader__spinner"></div>
+                        <p class="table-loader__text">Loading issues...</p>
+                    </div>
+
+                    <table id="issueTable" hidden>
+                        <caption class="sr-only">Issue management table</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Issue ID</th>
+                                <th scope="col">Asset Name</th>
+                                <th scope="col">Reporter</th>
+                                <th scope="col">Issue Title</th>
+                                <th scope="col">Priority</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Created Date</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="issueBody"></tbody>
+                    </table>
+
+                    <div class="empty-state" id="issueEmpty" hidden>
+                        <h3>No issue reports found</h3>
+                        <p>No issues have been submitted yet.</p>
+                    </div>
+                </div>
+
+                <nav class="pagination" aria-label="Issue pagination" id="issuePagination" hidden>
+                    <button type="button" id="issuePrev" disabled aria-disabled="true">Previous</button>
+                    <ul id="issuePageList"></ul>
+                    <button type="button" id="issueNext">Next</button>
+                </nav>
+            </section>
+        </main>
+
+        <!-- ISSUE DETAIL / UPDATE MODAL -->
+        <div id="issueModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="issue-modal-title" hidden>
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h3 id="issue-modal-title">Issue Details</h3>
+                    <button type="button" id="issueModalClose" class="profile-modal-close"
+                        aria-label="Close issue modal">&times;</button>
+                </header>
+
+                <div class="issue-modal-body" id="issueModalBody"></div>
+
+                <form id="issueForm" hidden>
+                    <div class="form-grid">
+                        <label for="issueAssignTo">
+                            Assign To
+                            <input type="text" id="issueAssignTo" name="issueAssignTo"
+                                placeholder="Enter assignee name" />
+                        </label>
+                        <label for="issueStatusSelect">
+                            Status
+                            <select id="issueStatusSelect" name="issueStatusSelect">
+                                <option value="Open">Open</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Resolved">Resolved</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+                        </label>
+                        <label for="issuePrioritySelect">
+                            Priority
+                            <select id="issuePrioritySelect" name="issuePrioritySelect">
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                                <option value="Critical">Critical</option>
+                            </select>
+                        </label>
+                    </div>
+                </form>
+
+                <div id="serviceHistorySection" hidden>
+                    <h4 style="margin: 16px 0 8px; font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;">Service History</h4>
+                    <div id="serviceHistoryTimeline" class="service-history-timeline"></div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" id="issueCancelBtn">Cancel</button>
+                    <button type="button" id="addMaintenanceBtn" class="primary-button" hidden>Add Maintenance Update</button>
+                    <button type="button" id="issueSaveBtn" class="primary-button" hidden>Save Changes</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADD MAINTENANCE UPDATE MODAL -->
+        <div id="maintenanceModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="maintenance-modal-title" hidden>
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h3 id="maintenance-modal-title">Add Maintenance Update</h3>
+                    <button type="button" id="maintenanceModalClose" class="profile-modal-close"
+                        aria-label="Close maintenance modal">&times;</button>
+                </header>
+
+                <form id="maintenanceForm">
+                    <div class="form-grid" style="padding: 16px 24px;">
+                        <label for="maintenanceAction">
+                            Action Performed
+                            <input type="text" id="maintenanceAction" name="maintenanceAction"
+                                placeholder="e.g. Replaced hard drive" required />
+                        </label>
+                        <label for="maintenanceTechnician">
+                            Technician Name
+                            <input type="text" id="maintenanceTechnician" name="maintenanceTechnician"
+                                placeholder="Enter technician name" required />
+                        </label>
+                        <label for="maintenanceStatus">
+                            Current Status
+                            <select id="maintenanceStatus" name="maintenanceStatus" required>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Resolved">Resolved</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+                        </label>
+                        <label for="maintenanceRemarks" class="full-width">
+                            Remarks (optional)
+                            <textarea id="maintenanceRemarks" name="maintenanceRemarks"
+                                placeholder="Additional notes about the maintenance..." rows="3"></textarea>
+                        </label>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" id="maintenanceCancelBtn">Cancel</button>
+                        <button type="submit" id="maintenanceSaveBtn" class="primary-button">Save Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- DELETE ISSUE MODAL -->
+        <div id="deleteIssueModal" class="modal" role="dialog" aria-modal="true"
+            aria-labelledby="delete-issue-modal-title" hidden>
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h3 id="delete-issue-modal-title">Delete Issue</h3>
+                    <button type="button" id="deleteIssueModalClose" class="profile-modal-close"
+                        aria-label="Close delete issue modal">&times;</button>
+                </header>
+
+                <div class="delete-confirmation">
+                    <div class="warning-icon" aria-hidden="true">⚠</div>
+                    <p>Are you sure you want to delete this issue? This action cannot be undone.</p>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" id="cancelDeleteIssueBtn">Cancel</button>
+                    <button type="button" id="confirmDeleteIssueBtn" class="danger-button">Delete Issue</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADD ISSUE MODAL -->
+        <div id="addIssueModal" class="modal" role="dialog" aria-modal="true"
+            aria-labelledby="add-issue-modal-title" hidden>
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h3 id="add-issue-modal-title">Add New Issue</h3>
+                    <button type="button" id="addIssueModalClose" class="profile-modal-close"
+                        aria-label="Close add issue modal">&times;</button>
+                </header>
+
+                <form id="addIssueForm">
+                    <div class="add-issue-form-body">
+                        <div class="add-issue-upload-section">
+                            <div class="avatar-upload" id="addIssueAvatar">
+                                <svg class="avatar-upload__icon" viewBox="0 0 24 24" width="28" height="28"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                                    <circle cx="12" cy="13" r="4" />
+                                </svg>
+                                <img id="addIssueImagePreview" class="avatar-upload__img" alt="Issue preview">
+                                <div class="avatar-upload__overlay">
+                                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path
+                                            d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                                        <circle cx="12" cy="13" r="4" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <input type="file" id="addIssueImage" name="addIssueImage" accept="image/jpeg,image/png,image/webp" style="display:none;" />
+                            <p class="add-issue-upload-hint">Click to add issue image</p>
+                        </div>
+
+                        <div class="form-grid" style="padding: 0 24px 16px;">
+                            <label for="addIssueAsset">
+                                Select Asset
+                                <select id="addIssueAsset" name="addIssueAsset" required>
+                                    <option value="">Select an asset</option>
+                                </select>
+                            </label>
+                            <label for="addIssueTitle">
+                                Issue Title
+                                <input type="text" id="addIssueTitle" name="addIssueTitle"
+                                    placeholder="Enter issue title" required />
+                            </label>
+                            <label for="addIssueDescription" class="full-width">
+                                Issue Description
+                                <textarea id="addIssueDescription" name="addIssueDescription"
+                                    placeholder="Describe the issue in detail" rows="3" required></textarea>
+                            </label>
+                            <label for="addIssuePriority">
+                                Priority
+                                <select id="addIssuePriority" name="addIssuePriority" required>
+                                    <option value="Low">Low</option>
+                                    <option value="Medium" selected>Medium</option>
+                                    <option value="High">High</option>
+                                    <option value="Critical">Critical</option>
+                                </select>
+                            </label>
+                            <label for="addIssueStatus">
+                                Status
+                                <select id="addIssueStatus" name="addIssueStatus" required>
+                                    <option value="Open" selected>Open</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Resolved">Resolved</option>
+                                    <option value="Closed">Closed</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" id="addIssueCancelBtn">Cancel</button>
+                        <button type="submit" id="addIssueSaveBtn" class="primary-button">Save Issue</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- PROFILE MODAL -->
+        <div id="profileModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title"
+            hidden>
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h3 id="profile-modal-title">My Profile</h3>
+                    <button type="button" class="profile-modal-close" aria-label="Close profile modal">&times;</button>
+                </header>
+
+                <div class="profile-modal-body" id="profileModalBody">
+                    <div class="profile-avatar-section">
+                        <div class="profile-avatar" id="profileAvatar">
+                            <span class="profile-avatar-initials" id="profileAvatarInitials">?</span>
+                        </div>
+                        <img id="profileAvatarImg" class="profile-avatar-img" src="" alt="Profile photo" hidden />
+                    </div>
+
+                    <div class="profile-details">
+                        <div class="profile-field">
+                            <span class="profile-label">Full Name</span>
+                            <span class="profile-value" id="profileFullName">&mdash;</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="profile-label">Email Address</span>
+                            <span class="profile-value" id="profileEmail">&mdash;</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="profile-label">Authentication Provider</span>
+                            <span class="profile-value" id="profileProvider">&mdash;</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="profile-label">Account Created</span>
+                            <span class="profile-value" id="profileCreated">&mdash;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="profile-modal-close">Close</button>
+                    <button type="button" class="primary-button" id="editProfileBtn">Edit Profile</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- EDIT PROFILE MODAL -->
+        <div id="editProfileModal" class="modal" role="dialog" aria-modal="true"
+            aria-labelledby="edit-profile-modal-title" hidden>
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h3 id="edit-profile-modal-title">Edit Profile</h3>
+                    <button type="button" class="edit-profile-modal-close"
+                        aria-label="Close edit profile modal">&times;</button>
+                </header>
+
+                <form id="editProfileForm">
+                    <div class="edit-form-body">
+                        <div class="edit-profile-image-section">
+                            <div class="edit-profile-image-wrapper" id="editProfileImageWrapper">
+                                <div class="edit-profile-avatar" id="editProfileAvatar">
+                                    <span class="edit-profile-avatar-initials" id="editProfileAvatarInitials">?</span>
+                                </div>
+                                <img id="editProfileAvatarImg" class="edit-profile-avatar-img" src=""
+                                    alt="Profile photo" hidden />
+                                <div class="edit-profile-image-overlay" id="editProfileImageOverlay">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path
+                                            d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                                        <circle cx="12" cy="13" r="4" />
+                                    </svg>
+                                </div>
+                                <input type="file" id="editProfileImageInput" accept="image/jpeg,image/png,image/webp"
+                                    hidden />
+                            </div>
+                            <p class="edit-profile-image-hint">Click to change profile image</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editProfileFullName">Full Name</label>
+                            <input type="text" id="editProfileFullName" class="form-input" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editProfileEmail">Email Address</label>
+                            <input type="email" id="editProfileEmail" class="form-input" readonly />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editProfileProvider">Authentication Provider</label>
+                            <input type="text" id="editProfileProvider" class="form-input" readonly />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editProfileCreated">Account Created</label>
+                            <input type="text" id="editProfileCreated" class="form-input" readonly />
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="edit-profile-modal-close">Cancel</button>
+                        <button type="submit" class="primary-button" id="saveProfileBtn">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- CHANGE PASSWORD MODAL -->
+        <div id="changePasswordModal" class="modal" role="dialog" aria-modal="true"
+            aria-labelledby="change-password-modal-title" hidden>
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h3 id="change-password-modal-title">Change Password</h3>
+                    <button type="button" class="change-password-modal-close"
+                        aria-label="Close change password modal">&times;</button>
+                </header>
+
+                <form id="changePasswordForm">
+                    <div class="change-password-body">
+                        <p class="change-password-description">Update your account password securely.</p>
+
+                        <div class="form-group">
+                            <label for="currentPassword">Current Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="currentPassword" class="form-input"
+                                    placeholder="Enter current password" autocomplete="current-password" />
+                                <button type="button" class="eye-toggle"
+                                    aria-label="Toggle password visibility"></button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="newPassword" class="form-input"
+                                    placeholder="Enter new password" autocomplete="new-password" />
+                                <button type="button" class="eye-toggle"
+                                    aria-label="Toggle password visibility"></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="change-password-modal-close">Cancel</button>
+                        <button type="submit" class="primary-button" id="savePasswordBtn">Save Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <script type="module" src="../../js/issues/issues.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,346 @@
+.issue-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.issue-stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+}
+
+.issue-stat-card .stat-label {
+    margin-bottom: 8px;
+}
+
+.issue-stat-card .stat-value {
+    font-size: 24px;
+}
+
+.issue-stat-card .stat-meta {
+    margin-top: 6px;
+}
+
+.priority-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+.priority-badge.priority-low {
+    background: rgba(16, 185, 129, 0.12);
+    color: #047857;
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.priority-badge.priority-medium {
+    background: rgba(249, 115, 22, 0.12);
+    color: #c2410c;
+    border-color: rgba(249, 115, 22, 0.2);
+}
+
+.priority-badge.priority-high {
+    background: rgba(239, 68, 68, 0.12);
+    color: #b91c1c;
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+.priority-badge.priority-critical {
+    background: rgba(109, 40, 217, 0.12);
+    color: #6d28d9;
+    border-color: rgba(109, 40, 217, 0.2);
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+.status-badge.status-open {
+    background: rgba(249, 115, 22, 0.12);
+    color: #c2410c;
+    border-color: rgba(249, 115, 22, 0.2);
+}
+
+.status-badge.status-pending,
+.status-badge.status-progress {
+    background: rgba(59, 130, 246, 0.12);
+    color: #1d4ed8;
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.status-badge.status-active,
+.status-badge.status-resolved {
+    background: rgba(16, 185, 129, 0.12);
+    color: #047857;
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.status-badge.status-archived,
+.status-badge.status-closed {
+    background: rgba(107, 114, 128, 0.12);
+    color: #4b5563;
+    border-color: rgba(107, 114, 128, 0.2);
+}
+
+.issue-action-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.issue-action-btn {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-dark);
+    padding: 5px 8px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.issue-action-btn--secondary {
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #1d4ed8;
+}
+
+.issue-action-btn--danger {
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #b91c1c;
+}
+
+.issue-modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.issue-detail-list {
+    display: grid;
+    gap: 10px;
+}
+
+.issue-detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.issue-detail-item strong {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.issue-image-preview {
+    width: 100%;
+    max-height: 220px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+}
+
+@media (max-width: 900px) {
+    .issue-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 680px) {
+    .issue-stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.service-history-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 8px 0;
+}
+
+.service-history-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-card);
+}
+
+.service-history-entry__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.service-history-entry__action {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text-dark);
+}
+
+.service-history-entry__date {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.service-history-entry__details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.service-history-entry__details span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.service-history-entry__remarks {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.5;
+    margin-top: 4px;
+}
+
+.service-history-empty {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+#serviceHistorySection h4 {
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    margin-top: 16px;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+/* ============================================================
+   VIEW ISSUE MODAL
+   ============================================================ */
+
+.issue-view-body {
+    padding: 0 4px;
+}
+
+.issue-view-image-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.issue-view-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.issue-view-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.issue-view-row {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 16px;
+}
+
+.issue-view-row:last-child {
+    border-bottom: none;
+}
+
+.issue-view-label {
+    flex: 0 0 140px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding-top: 1px;
+}
+
+.issue-view-value {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text-dark);
+    word-break: break-word;
+}
+
+/* ============================================================
+   ADD ISSUE MODAL — IMAGE UPLOAD
+   ============================================================ */
+
+.add-issue-form-body {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.add-issue-upload-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 24px 12px;
+}
+
+.add-issue-upload-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+#addIssueForm .form-grid {
+    padding-top: 0 !important;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 600px) {
+    .issue-view-row {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .issue-view-label {
+        flex: none;
+    }
+}

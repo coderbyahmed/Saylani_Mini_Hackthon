@@ -1,11 +1,11 @@
 // ============================================================
-// RECORDS FILTER — UI CONTROLLER
-// Responsibility: Client-side search, status filtering, sorting,
-// and filter reset. Operates on the already-loaded records array
-// from recordsTable.js. No Firestore queries.
+// ASSETS FILTER — UI CONTROLLER
+// Responsibility: Client-side search, status filtering, category
+// filtering, sorting, and filter reset. Operates on the already-
+// loaded assets array from assetsTable.js. No Firestore queries.
 // ============================================================
 
-import { getCachedRecords, renderRecords } from "./recordsTable.js";
+import { getCachedRecords, renderAssets } from "./assetsTable.js";
 
 // ============================================================
 // STATE
@@ -26,6 +26,7 @@ const cacheDOMRefs = () => {
   refs = {
     searchInput: document.getElementById("searchRecords"),
     statusFilter: document.getElementById("filterStatus"),
+    categoryFilter: document.getElementById("filterCategory"),
     sortSelect: document.getElementById("sortBy"),
     refreshBtn: document.querySelector(".toolbar > button:nth-of-type(1)"),
   };
@@ -35,8 +36,6 @@ const cacheDOMRefs = () => {
 
 // ============================================================
 // PRIVATE — COMPARE TIMESTAMPS
-// Handles Firestore Timestamp, Date, string, and seconds
-// object formats. Returns a numeric difference for sorting.
 // ============================================================
 
 const getTime = (ts) => {
@@ -52,8 +51,6 @@ const compareTimestamps = (a, b) => getTime(a) - getTime(b);
 
 // ============================================================
 // PRIVATE — APPLY FILTERS
-// Reads current filter controls, filters/sorts the cached
-// records in memory, then renders the result.
 // ============================================================
 
 const applyFilters = () => {
@@ -62,25 +59,26 @@ const applyFilters = () => {
 
   const searchTerm = (r.searchInput ? r.searchInput.value : "").trim().toLowerCase();
   const statusValue = r.statusFilter ? r.statusFilter.value : "";
+  const categoryValue = r.categoryFilter ? r.categoryFilter.value : "";
   const sortValue = r.sortSelect ? r.sortSelect.value : "newest";
-
-  // --------------------------------------------------
-  // Filter
-  // --------------------------------------------------
 
   let filtered = records;
 
-  // Search — case-insensitive partial match on name, email, phone
   if (searchTerm) {
     filtered = filtered.filter((record) => {
-      const name = (record.fullName || "").toLowerCase();
-      const email = (record.email || "").toLowerCase();
-      const phone = (record.phoneNumber || "").toLowerCase();
-      return name.includes(searchTerm) || email.includes(searchTerm) || phone.includes(searchTerm);
+      const name = (record.assetName || "").toLowerCase();
+      const assetId = (record.assetId || "").toLowerCase();
+      const category = (record.category || "").toLowerCase();
+      const location = (record.location || "").toLowerCase();
+      return (
+        name.includes(searchTerm) ||
+        assetId.includes(searchTerm) ||
+        category.includes(searchTerm) ||
+        location.includes(searchTerm)
+      );
     });
   }
 
-  // Status — exact match (values are lowercase in HTML, records use capitalized)
   if (statusValue) {
     const target = statusValue.toLowerCase();
     filtered = filtered.filter((record) => {
@@ -89,9 +87,13 @@ const applyFilters = () => {
     });
   }
 
-  // --------------------------------------------------
-  // Sort
-  // --------------------------------------------------
+  if (categoryValue) {
+    const target = categoryValue.toLowerCase();
+    filtered = filtered.filter((record) => {
+      const category = (record.category || "").toLowerCase();
+      return category === target;
+    });
+  }
 
   filtered.sort((a, b) => {
     switch (sortValue) {
@@ -100,32 +102,26 @@ const applyFilters = () => {
       case "oldest":
         return compareTimestamps(a.createdAt, b.createdAt);
       case "name-asc":
-        return (a.fullName || "").localeCompare(b.fullName || "");
+        return (a.assetName || "").localeCompare(b.assetName || "");
       case "name-desc":
-        return (b.fullName || "").localeCompare(a.fullName || "");
+        return (b.assetName || "").localeCompare(a.assetName || "");
       default:
         return 0;
     }
   });
 
-  // --------------------------------------------------
-  // Render
-  // --------------------------------------------------
-
   if (filtered.length === 0) {
-    renderRecords(filtered, {
-      emptyTitle: "No matching records found",
+    renderAssets(filtered, {
+      emptyTitle: "No matching assets found",
       emptyDesc: "Try adjusting your search or filter criteria.",
     });
   } else {
-    renderRecords(filtered);
+    renderAssets(filtered);
   }
 };
 
 // ============================================================
 // PRIVATE — RESET FILTERS
-// Clears search input, resets status to "All Status" and sort
-// to "Newest First", then re-renders the full record set.
 // ============================================================
 
 const resetFilters = () => {
@@ -133,6 +129,7 @@ const resetFilters = () => {
 
   if (r.searchInput) r.searchInput.value = "";
   if (r.statusFilter) r.statusFilter.value = "";
+  if (r.categoryFilter) r.categoryFilter.value = "";
   if (r.sortSelect) r.sortSelect.value = "newest";
 
   applyFilters();
@@ -145,7 +142,6 @@ const resetFilters = () => {
 const setupEventListeners = () => {
   const r = cacheDOMRefs();
 
-  // Live search with debounce
   if (r.searchInput) {
     r.searchInput.addEventListener("input", () => {
       clearTimeout(filterTimeout);
@@ -153,22 +149,22 @@ const setupEventListeners = () => {
     });
   }
 
-  // Status filter
   if (r.statusFilter) {
     r.statusFilter.addEventListener("change", applyFilters);
   }
 
-  // Sort
+  if (r.categoryFilter) {
+    r.categoryFilter.addEventListener("change", applyFilters);
+  }
+
   if (r.sortSelect) {
     r.sortSelect.addEventListener("change", applyFilters);
   }
 
-  // Refresh button — resets filter controls only, no Firestore call
   if (r.refreshBtn) {
     r.refreshBtn.addEventListener("click", resetFilters);
   }
 
-  // Re-apply filters after CRUD operations to maintain current filter state
   document.addEventListener("record-added", () => {
     setTimeout(applyFilters, 0);
   });
@@ -178,7 +174,7 @@ const setupEventListeners = () => {
 // INIT
 // ============================================================
 
-const initRecordsFilter = () => {
+const initAssetsFilter = () => {
   if (initialized) return;
   initialized = true;
 
@@ -189,4 +185,4 @@ const initRecordsFilter = () => {
   setupEventListeners();
 };
 
-export { initRecordsFilter };
+export { initAssetsFilter };

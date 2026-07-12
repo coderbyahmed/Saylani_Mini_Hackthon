@@ -1,19 +1,19 @@
 // ============================================================
-// VIEW RECORD — UI CONTROLLER
-// Responsibility: Open the View Record modal, fetch the
-// selected record from Firestore, and populate all fields.
+// VIEW ASSET — UI CONTROLLER
+// Responsibility: Open the View Asset modal, fetch the
+// selected asset from Firestore, and populate all fields.
 // No business logic, no Firestore queries, no Cloudinary.
 // ============================================================
 
 import { showErrorToast } from "../ui/toast.js";
-import { fetchRecordById } from "../dashboard/dashboardService.js";
+import { fetchAssetById } from "../dashboard/dashboardService.js";
 
 // ============================================================
 // CONSTANTS
 // ============================================================
 
 const MODAL_SELECTOR = "#viewRecordModal";
-const CLOSE_BTN_SELECTOR = '[aria-label="Close view record modal"]';
+const CLOSE_BTN_SELECTOR = '[aria-label="Close view asset modal"]';
 const CONTENT_SELECTOR = "#viewRecordContent";
 const LOADER_SELECTOR = "#viewLoader";
 const CLOSE_FOOTER_SELECTOR = "#viewCloseBtn";
@@ -46,17 +46,10 @@ const cacheDOMRefs = () => {
     avatarImg: document.getElementById("viewAvatarImg"),
     profileName: document.getElementById("viewProfileName"),
     profileBadge: document.getElementById("viewProfileBadge"),
-    fullName: document.getElementById("viewFullName"),
-    referenceName: document.getElementById("viewReferenceName"),
-    email: document.getElementById("viewEmail"),
-    phone: document.getElementById("viewPhone"),
-    altPhone: document.getElementById("viewAltPhone"),
-    gender: document.getElementById("viewGender"),
-    dob: document.getElementById("viewDob"),
-    country: document.getElementById("viewCountry"),
-    city: document.getElementById("viewCity"),
-    address: document.getElementById("viewAddress"),
-    status: document.getElementById("viewStatus"),
+    assetId: document.getElementById("viewAssetId"),
+    category: document.getElementById("viewCategory"),
+    location: document.getElementById("viewLocation"),
+    lastMaintenance: document.getElementById("viewLastMaintenance"),
     createdDate: document.getElementById("viewCreatedDate"),
     updatedDate: document.getElementById("viewUpdatedDate"),
   };
@@ -66,7 +59,6 @@ const cacheDOMRefs = () => {
 
 // ============================================================
 // PRIVATE — FORMAT TIMESTAMP
-// Reuses the same pattern as recordsTable.js.
 // ============================================================
 
 const formatDate = (timestamp) => {
@@ -117,7 +109,6 @@ const getInitials = (name) => {
 
 // ============================================================
 // PRIVATE — GET BADGE CLASS
-// Mirrors the logic in recordsTable.js.
 // ============================================================
 
 const getBadgeClass = (status) => {
@@ -137,7 +128,6 @@ const getBadgeClass = (status) => {
 
 // ============================================================
 // PRIVATE — SET TEXT
-// Safely sets textContent on a cached element.
 // ============================================================
 
 const setText = (el, value) => {
@@ -146,22 +136,20 @@ const setText = (el, value) => {
 
 // ============================================================
 // PRIVATE — POPULATE FIELDS
-// Fills every field inside the modal with record data.
 // ============================================================
 
-const populateFields = (record) => {
+const populateFields = (asset) => {
   const r = refs;
   if (!r) return;
 
-  // Profile section
-  const initials = getInitials(record.fullName);
+  const initials = getInitials(asset.assetName);
 
-  if (record.profileImageUrl) {
+  if (asset.assetImageUrl) {
     if (r.avatarInitials) r.avatarInitials.hidden = true;
     if (r.avatarImg) {
       r.avatarImg.hidden = false;
-      r.avatarImg.src = record.profileImageUrl;
-      r.avatarImg.alt = record.fullName || "";
+      r.avatarImg.src = asset.assetImageUrl;
+      r.avatarImg.alt = asset.assetName || "";
     }
   } else {
     if (r.avatarInitials) {
@@ -171,40 +159,23 @@ const populateFields = (record) => {
     if (r.avatarImg) r.avatarImg.hidden = true;
   }
 
-  setText(r.profileName, record.fullName);
+  setText(r.profileName, asset.assetName);
 
-  // Profile status badge
   if (r.profileBadge) {
-    r.profileBadge.className = getBadgeClass(record.status);
-    r.profileBadge.textContent = record.status || "—";
+    r.profileBadge.className = getBadgeClass(asset.status);
+    r.profileBadge.textContent = asset.status || "—";
   }
 
-  // Information fields
-  setText(r.fullName, record.fullName);
-  setText(r.referenceName, record.referenceName);
-  setText(r.email, record.email);
-  setText(r.phone, record.phoneNumber);
-  setText(r.altPhone, record.alternatePhoneNumber);
-  setText(r.gender, record.gender);
-  setText(r.dob, record.dateOfBirth);
-  setText(r.country, record.country);
-  setText(r.city, record.city);
-  setText(r.address, record.address);
-
-  // Status in info grid — renders as a badge
-  if (r.status) {
-    r.status.className = getBadgeClass(record.status);
-    r.status.textContent = record.status || "—";
-  }
-
-  // Dates
-  setText(r.createdDate, formatDate(record.createdAt));
-  setText(r.updatedDate, formatDate(record.updatedAt));
+  setText(r.assetId, asset.assetId);
+  setText(r.category, asset.category);
+  setText(r.location, asset.location);
+  setText(r.lastMaintenance, asset.lastMaintenance);
+  setText(r.createdDate, formatDate(asset.createdAt));
+  setText(r.updatedDate, formatDate(asset.updatedAt));
 };
 
 // ============================================================
 // PRIVATE — SHOW LOADING
-// Shows the spinner, hides the content.
 // ============================================================
 
 const showLoading = () => {
@@ -215,7 +186,6 @@ const showLoading = () => {
 
 // ============================================================
 // PRIVATE — HIDE LOADING
-// Hides the spinner, shows the content.
 // ============================================================
 
 const hideLoading = () => {
@@ -226,7 +196,6 @@ const hideLoading = () => {
 
 // ============================================================
 // PUBLIC — OPEN MODAL
-// Fetches the record by ID and populates the modal.
 // ============================================================
 
 const openModal = async (recordId) => {
@@ -242,20 +211,20 @@ const openModal = async (recordId) => {
 
   try {
 
-    const record = await fetchRecordById(recordId);
+    const asset = await fetchAssetById(recordId);
 
-    if (!record) {
-      showErrorToast("Record not found. It may have been deleted.");
+    if (!asset) {
+      showErrorToast("Asset not found. It may have been deleted.");
       closeModal();
       return;
     }
 
-    populateFields(record);
+    populateFields(asset);
     hideLoading();
 
   } catch (error) {
 
-    showErrorToast(error.message || "Failed to load record.");
+    showErrorToast(error.message || "Failed to load asset.");
     closeModal();
 
   }
@@ -272,14 +241,11 @@ const closeModal = () => {
   modal.hidden = true;
   document.body.style.overflow = "";
 
-  // Reset loader state for next open
   showLoading();
 };
 
 // ============================================================
 // PRIVATE — HANDLE VIEW BUTTON CLICK
-// Uses event delegation on the table body to determine
-// which record was clicked and open its detail modal.
 // ============================================================
 
 const handleViewClick = (e) => {
@@ -302,31 +268,26 @@ const handleViewClick = (e) => {
 const setupEventListeners = () => {
   const r = cacheDOMRefs();
 
-  // Close via × button
   if (r.closeBtn) {
     r.closeBtn.addEventListener("click", closeModal);
   }
 
-  // Close via footer button
   if (r.closeFooterBtn) {
     r.closeFooterBtn.addEventListener("click", closeModal);
   }
 
-  // Outside click on backdrop
   if (r.modal) {
     r.modal.addEventListener("click", (e) => {
       if (e.target === r.modal) closeModal();
     });
   }
 
-  // Escape key
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && r.modal && !r.modal.hidden) {
       closeModal();
     }
   });
 
-  // Delegate view button clicks on the table body
   const tbody = document.querySelector(TABLE_BODY_SELECTOR);
   if (tbody) {
     tbody.addEventListener("click", handleViewClick);
@@ -337,7 +298,7 @@ const setupEventListeners = () => {
 // INIT
 // ============================================================
 
-const initViewRecord = () => {
+const initViewAsset = () => {
   if (initialized) return;
   initialized = true;
 
@@ -345,10 +306,9 @@ const initViewRecord = () => {
 
   if (!refs.modal) return;
 
-  // Start with loader visible, content hidden
   showLoading();
 
   setupEventListeners();
 };
 
-export { initViewRecord };
+export { initViewAsset };

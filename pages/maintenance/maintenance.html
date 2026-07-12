@@ -4,14 +4,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Asset Maintenance Management Dashboard" />
-    <title>Asset Dashboard</title>
+    <meta name="description" content="Maintenance — analytics, charts, and maintenance overview" />
+    <title>Maintenance</title>
     <link rel="stylesheet" href="../../css/dashboard/dashboard.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <style>
-        /* Sidebar width — compact professional layout */
         :root {
             --sidebar-width: 220px;
         }
@@ -20,23 +19,11 @@
 
 <body>
 
-    <!-- ============================================================
-         PAGE WRAPPER
-    ============================================================ -->
     <div class="dashboard-shell">
 
-        <!-- ============================================================
-             SIDEBAR
-             Update nav-link active class to highlight the current page.
-             href="records.html" links to the standalone Records page.
-        ============================================================ -->
+        <!-- SIDEBAR -->
         <aside class="sidebar" aria-label="Sidebar navigation">
-
             <div class="sidebar-brand" role="banner">
-                <!-- Row 1: Logo -->
-                <!-- <div class="brand-mark" aria-hidden="true">A</div> -->
-
-                <!-- Row 2: Title (left) + Toggle (right) -->
                 <div class="brand-bottom">
                     <div class="brand-text">
                         <h1>Admin Panel</h1>
@@ -51,7 +38,7 @@
             <nav class="sidebar-nav" aria-label="Primary navigation">
                 <ul>
                     <li>
-                        <a href="dashboard.html" aria-current="page" class="nav-link active" title="Dashboard">
+                        <a href="../dashboard/dashboard.html" class="nav-link" title="Dashboard">
                             <i class="fas fa-chart-pie" aria-hidden="true"></i>
                             <span>Dashboard</span>
                         </a>
@@ -69,7 +56,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="../maintenance/maintenance.html" class="nav-link" title="Maintenance">
+                        <a href="maintenance.html" aria-current="page" class="nav-link active" title="Maintenance">
                             <i class="fas fa-wrench" aria-hidden="true"></i>
                             <span>Maintenance</span>
                         </a>
@@ -85,32 +72,22 @@
             </div>
         </aside>
 
-        <!-- ============================================================
-             MAIN CONTENT
-        ============================================================ -->
+        <!-- MAIN CONTENT -->
         <main class="main-content" id="main-content">
 
-            <!-- ============================================================
-                 HEADER / NAVBAR
-                 Shared across all pages (Dashboard, Records, etc.)
-            ============================================================ -->
+            <!-- HEADER / NAVBAR -->
             <header class="topbar" role="banner">
                 <div class="page-heading">
                     <div class="brand-block">
                         <div class="brand-mark" aria-hidden="true">A</div>
                         <div>
-                            <h2>Asset Dashboard</h2>
-                            <p>Asset Maintenance Portal</p>
+                            <h2>Maintenance</h2>
+                            <p>Analytics and maintenance overview</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="topbar-actions">
-
-                    <!-- ============================================================
-                         THEME TOGGLE
-                         JS functionality will be implemented later
-                    ============================================================ -->
                     <button type="button" class="icon-button theme-toggle" aria-label="Toggle theme"
                         title="Toggle theme">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -127,10 +104,6 @@
                         </svg>
                     </button>
 
-                    <!-- ============================================================
-                         NOTIFICATION BELL
-                         Dynamically rendered by dashboardNotification.js.
-                    ============================================================ -->
                     <div class="notification-wrapper">
                         <button type="button" class="icon-button notification-trigger" aria-label="Notifications"
                             aria-haspopup="true" aria-expanded="false">
@@ -147,9 +120,7 @@
                                 <span class="notification-title">Notifications</span>
                                 <span class="notification-count">0 new</span>
                             </div>
-
                             <div class="notification-body"></div>
-
                             <div class="notification-empty" hidden>
                                 <p>No Notifications Yet</p>
                                 <p>You're all caught up.</p>
@@ -164,188 +135,102 @@
                             <span class="profile-name" id="headerProfileName">Admin User</span>
                             <span class="dropdown-chevron" aria-hidden="true">▾</span>
                         </button>
-
                         <div class="profile-dropdown" role="menu" aria-label="Profile actions">
                             <a href="#" role="menuitem">My Profile</a>
                             <a href="#" role="menuitem">Change Password</a>
                             <a href="#" role="menuitem">Logout</a>
-
-                            <!-- ============================================================
-                                 FUTURE DROPDOWN ITEMS (commented out)
-                            ============================================================ -->
-                            <!--
-                            <a href="#" role="menuitem">Security</a>
-                            <a href="#" role="menuitem">Billing</a>
-                            <a href="#" role="menuitem">Activity Log</a>
-                            -->
                         </div>
                     </div>
                 </div>
             </header>
 
-            <!-- ============================================================
-                 WELCOME / ADMIN INFORMATION
-                 Displays a greeting and quick summary for the logged-in user.
-            ============================================================ -->
-            <section class="welcome-section" aria-labelledby="welcome-heading">
-                <div class="welcome-card">
-                    <div class="welcome-content">
-                        <h2 id="welcome-heading">Welcome back, Admin</h2>
-                        <p>Here's what's happening with your assets today. Use the navigation or quick links below to
-                            manage your assets.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ============================================================
-                 DASHBOARD STATISTICS
-                 Core metrics displayed as themed stat cards.
-                 Replace the sample values with live data in production.
-            ============================================================ -->
-            <section class="stats-section" aria-labelledby="stats-heading">
+            <!-- DASHBOARD ANALYTICS SECTION -->
+            <section class="analytics-section" id="analyticsSection" aria-labelledby="analytics-heading">
                 <div class="section-heading">
-                    <h3 id="stats-heading">Overview</h3>
-                    <p>Core metrics for your asset maintenance workspace.</p>
+                    <h3 id="analytics-heading">Analytics &amp; Insights</h3>
+                    <p>Charts and maintenance overview powered by live data.</p>
                 </div>
 
-                <div class="stats-grid">
-                    <article class="stat-card">
-                        <p class="stat-label">Total Assets</p>
-                        <h4 class="stat-value" id="cardTotalRecords">—</h4>
-                        <p class="stat-meta">Total assets in the system</p>
+                <!-- Analytics Summary Stat Cards -->
+                <div class="analytics-cards">
+                    <article class="analytics-card analytics-card--assets">
+                        <div class="analytics-card__icon"><i class="fas fa-boxes-stacked" aria-hidden="true"></i></div>
+                        <div class="analytics-card__info">
+                            <p class="analytics-card__label">Total Assets</p>
+                            <h4 class="analytics-card__value" id="analyticsTotalAssets">—</h4>
+                        </div>
                     </article>
-
-                    <article class="stat-card">
-                        <p class="stat-label">Active Assets</p>
-                        <h4 class="stat-value" id="cardActiveRecords">—</h4>
-                        <p class="stat-meta">Currently live</p>
+                    <article class="analytics-card analytics-card--active">
+                        <div class="analytics-card__icon"><i class="fas fa-check-circle" aria-hidden="true"></i></div>
+                        <div class="analytics-card__info">
+                            <p class="analytics-card__label">Active Assets</p>
+                            <h4 class="analytics-card__value" id="analyticsActiveAssets">—</h4>
+                        </div>
                     </article>
-
-                    <article class="stat-card">
-                        <p class="stat-label">Pending Maintenance</p>
-                        <h4 class="stat-value" id="cardPendingRecords">—</h4>
-                        <p class="stat-meta">Awaiting review</p>
+                    <article class="analytics-card analytics-card--due">
+                        <div class="analytics-card__icon"><i class="fas fa-wrench" aria-hidden="true"></i></div>
+                        <div class="analytics-card__info">
+                            <p class="analytics-card__label">Maintenance Due</p>
+                            <h4 class="analytics-card__value" id="analyticsMaintenanceDue">—</h4>
+                        </div>
                     </article>
-
-                    <article class="stat-card">
-                        <p class="stat-label">Archived Assets</p>
-                        <h4 class="stat-value" id="cardArchivedRecords">—</h4>
-                        <p class="stat-meta">Stored safely</p>
+                    <article class="analytics-card analytics-card--total-issues">
+                        <div class="analytics-card__icon"><i class="fas fa-bug" aria-hidden="true"></i></div>
+                        <div class="analytics-card__info">
+                            <p class="analytics-card__label">Total Issues</p>
+                            <h4 class="analytics-card__value" id="analyticsTotalIssues">—</h4>
+                        </div>
                     </article>
-
-                    <!-- ============================================================
-                         FUTURE STAT CARDS (commented out)
-                         Uncomment to add additional metrics.
-                    ============================================================ -->
-                    <!--
-                    <article class="stat-card">
-                        <p class="stat-label">Pending Approvals</p>
-                        <h4 class="stat-value">18</h4>
-                        <p class="stat-meta">Needs attention</p>
+                    <article class="analytics-card analytics-card--open">
+                        <div class="analytics-card__icon"><i class="fas fa-circle-exclamation" aria-hidden="true"></i></div>
+                        <div class="analytics-card__info">
+                            <p class="analytics-card__label">Open Issues</p>
+                            <h4 class="analytics-card__value" id="analyticsOpenIssues">—</h4>
+                        </div>
                     </article>
-                    <article class="stat-card">
-                        <p class="stat-label">Recent Activity</p>
-                        <h4 class="stat-value">320</h4>
-                        <p class="stat-meta">Live now</p>
+                    <article class="analytics-card analytics-card--progress">
+                        <div class="analytics-card__icon"><i class="fas fa-spinner" aria-hidden="true"></i></div>
+                        <div class="analytics-card__info">
+                            <p class="analytics-card__label">In Progress</p>
+                            <h4 class="analytics-card__value" id="analyticsInProgressIssues">—</h4>
+                        </div>
                     </article>
-                    -->
+                    <article class="analytics-card analytics-card--resolved">
+                        <div class="analytics-card__icon"><i class="fas fa-circle-check" aria-hidden="true"></i></div>
+                        <div class="analytics-card__info">
+                            <p class="analytics-card__label">Resolved</p>
+                            <h4 class="analytics-card__value" id="analyticsResolvedIssues">—</h4>
+                        </div>
+                    </article>
+                    <article class="analytics-card analytics-card--closed">
+                        <div class="analytics-card__icon"><i class="fas fa-circle-xmark" aria-hidden="true"></i></div>
+                        <div class="analytics-card__info">
+                            <p class="analytics-card__label">Closed</p>
+                            <h4 class="analytics-card__value" id="analyticsClosedIssues">—</h4>
+                        </div>
+                    </article>
                 </div>
-            </section>
 
-            <!-- ============================================================
-                 RECENT ACTIVITY
-                 Chronological list of recent actions in the workspace.
-                 Populated dynamically by dashboardRecentActivity.js.
-            ============================================================ -->
-            <section class="activity-section" aria-labelledby="activity-heading">
-                <div class="section-heading table-section__heading">
-                    <div>
-                        <h3 id="activity-heading">Recent Activity</h3>
-                        <p>Latest actions performed in the system</p>
+                <!-- Charts Row -->
+                <div class="analytics-charts">
+                    <div class="analytics-chart-card">
+                        <h4 class="analytics-chart-card__title">Issue Status Distribution</h4>
+                        <div class="analytics-chart-wrapper analytics-chart-wrapper--doughnut">
+                            <canvas id="issueStatusChart"></canvas>
+                        </div>
                     </div>
-                    <button type="button" class="danger-button" id="deleteAllActivitiesBtn" hidden>Delete All</button>
+                    <div class="analytics-chart-card">
+                        <h4 class="analytics-chart-card__title">Assets by Category</h4>
+                        <div class="analytics-chart-wrapper analytics-chart-wrapper--bar">
+                            <canvas id="assetCategoryChart"></canvas>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="table-wrapper">
-
-                    <!-- ============================================================
-                         LOADING STATE
-                         Centered spinner while fetching activities.
-                    ============================================================ -->
-                    <div class="table-loader" id="activityLoader">
-                        <div class="table-loader__spinner"></div>
-                        <p class="table-loader__text">Loading activities...</p>
-                    </div>
-
-                    <!-- ============================================================
-                         ACTIVITY TABLE
-                    ============================================================ -->
-                    <table id="activityTable" hidden>
-                        <caption class="sr-only">Recent activity log</caption>
-                        <thead>
-                            <tr>
-                                <th scope="col">Activity</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Date &amp; Time</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="activityBody">
-                        </tbody>
-                    </table>
-
-                    <!-- ============================================================
-                         EMPTY STATE
-                         Shown when no activities exist.
-                    ============================================================ -->
-                    <div class="empty-state" id="activityEmpty" hidden>
-                        <h3>No recent activity</h3>
-                        <p>No recent activity available.</p>
-                    </div>
-
-                </div>
-
-                <!-- ============================================================
-                     ACTIVITY PAGINATION (UI only — logic not yet implemented)
-                     Reuses the same .pagination design as the Records page.
-                ============================================================ -->
-                <nav class="pagination" aria-label="Activity pagination" id="activityPagination" hidden>
-                    <button type="button" id="activityPrev" disabled aria-disabled="true">Previous</button>
-                    <ul id="activityPageList"></ul>
-                    <button type="button" id="activityNext">Next</button>
-                </nav>
             </section>
         </main>
 
-        <!-- ============================================================
-             ACTIVITY DELETE CONFIRMATION MODAL (UI only)
-             Compact confirmation dialog — functionality will be added later.
-        ============================================================ -->
-        <div id="deleteActivityModal" class="modal" role="dialog" aria-modal="true"
-            aria-labelledby="delete-activity-modal-title" hidden>
-            <div class="modal-content">
-                <header class="modal-header">
-                    <h3 id="delete-activity-modal-title">Delete Activity</h3>
-                    <button type="button" class="profile-modal-close"
-                        aria-label="Close delete activity modal">&times;</button>
-                </header>
-
-                <div class="delete-confirmation">
-                    <div class="warning-icon" aria-hidden="true">&#9888;</div>
-                    <p>Are you sure you want to delete this activity? This action cannot be undone.</p>
-                </div>
-
-                <div class="modal-actions">
-                    <button type="button">Cancel</button>
-                    <button type="button" class="danger-button">Delete Activity</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================================
-             PROFILE MODAL
-             Displays the currently logged-in user's profile information.
-        ============================================================ -->
+        <!-- PROFILE MODAL -->
         <div id="profileModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title"
             hidden>
             <div class="modal-content">
@@ -355,7 +240,6 @@
                 </header>
 
                 <div class="profile-modal-body" id="profileModalBody">
-
                     <div class="profile-avatar-section">
                         <div class="profile-avatar" id="profileAvatar">
                             <span class="profile-avatar-initials" id="profileAvatarInitials">?</span>
@@ -390,10 +274,7 @@
             </div>
         </div>
 
-        <!-- ============================================================
-             EDIT PROFILE MODAL
-             Allows the user to update their profile image and full name.
-        ============================================================ -->
+        <!-- EDIT PROFILE MODAL -->
         <div id="editProfileModal" class="modal" role="dialog" aria-modal="true"
             aria-labelledby="edit-profile-modal-title" hidden>
             <div class="modal-content">
@@ -405,7 +286,6 @@
 
                 <form id="editProfileForm">
                     <div class="edit-form-body">
-                        <!-- Profile Image -->
                         <div class="edit-profile-image-section">
                             <div class="edit-profile-image-wrapper" id="editProfileImageWrapper">
                                 <div class="edit-profile-avatar" id="editProfileAvatar">
@@ -414,8 +294,9 @@
                                 <img id="editProfileAvatarImg" class="edit-profile-avatar-img" src=""
                                     alt="Profile photo" hidden />
                                 <div class="edit-profile-image-overlay" id="editProfileImageOverlay">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
                                         <path
                                             d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                                         <circle cx="12" cy="13" r="4" />
@@ -427,25 +308,21 @@
                             <p class="edit-profile-image-hint">Click to change profile image</p>
                         </div>
 
-                        <!-- Full Name -->
                         <div class="form-group">
                             <label for="editProfileFullName">Full Name</label>
                             <input type="text" id="editProfileFullName" class="form-input" required />
                         </div>
 
-                        <!-- Email (read-only) -->
                         <div class="form-group">
                             <label for="editProfileEmail">Email Address</label>
                             <input type="email" id="editProfileEmail" class="form-input" readonly />
                         </div>
 
-                        <!-- Provider (read-only) -->
                         <div class="form-group">
                             <label for="editProfileProvider">Authentication Provider</label>
                             <input type="text" id="editProfileProvider" class="form-input" readonly />
                         </div>
 
-                        <!-- Created Date (read-only) -->
                         <div class="form-group">
                             <label for="editProfileCreated">Account Created</label>
                             <input type="text" id="editProfileCreated" class="form-input" readonly />
@@ -460,10 +337,7 @@
             </div>
         </div>
 
-        <!-- ============================================================
-             CHANGE PASSWORD MODAL
-             Allows the user to update their account password securely.
-        ============================================================ -->
+        <!-- CHANGE PASSWORD MODAL -->
         <div id="changePasswordModal" class="modal" role="dialog" aria-modal="true"
             aria-labelledby="change-password-modal-title" hidden>
             <div class="modal-content">
@@ -507,7 +381,7 @@
         </div>
 
     </div>
-    <script type="module" src="../../js/dashboard/dashboard.js"></script>
+    <script type="module" src="../../js/maintenance/maintenance.js"></script>
 </body>
 
 </html>

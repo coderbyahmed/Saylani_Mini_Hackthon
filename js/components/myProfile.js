@@ -115,13 +115,12 @@ const openEditModal = () => {
   const photoURL = user.photoURL || null;
 
   if (photoURL) {
-    r.avatarImg.src = photoURL;
-    r.avatarImg.hidden = false;
-    r.avatar.hidden = true;
+    if (r.avatarImg) { r.avatarImg.src = photoURL; r.avatarImg.hidden = false; }
+    if (r.avatar) r.avatar.hidden = true;
   } else {
-    r.avatar.hidden = false;
-    r.avatarImg.hidden = true;
-    r.avatarInitials.textContent = getInitials(displayName);
+    if (r.avatar) r.avatar.hidden = false;
+    if (r.avatarImg) r.avatarImg.hidden = true;
+    if (r.avatarInitials) r.avatarInitials.textContent = getInitials(displayName);
   }
 
   r.fullName.value = displayName;
@@ -160,22 +159,21 @@ const renderProfile = ({ userRecord }) => {
   const photoURL = userRecord?.photoURL || null;
 
   if (photoURL) {
-    r.avatarImg.src = photoURL;
-    r.avatarImg.hidden = false;
-    r.avatarSection.hidden = true;
+    if (r.avatarImg) { r.avatarImg.src = photoURL; r.avatarImg.hidden = false; }
+    if (r.avatarSection) r.avatarSection.hidden = true;
   } else {
-    r.avatarSection.hidden = false;
-    r.avatarImg.hidden = true;
-    r.avatarInitials.textContent = getInitials(userRecord?.fullName);
+    if (r.avatarSection) r.avatarSection.hidden = false;
+    if (r.avatarImg) r.avatarImg.hidden = true;
+    if (r.avatarInitials) r.avatarInitials.textContent = getInitials(userRecord?.fullName);
   }
 
-  r.fullName.textContent = userRecord?.fullName || "—";
-  r.email.textContent = userRecord?.email || "—";
+  if (r.fullName) r.fullName.textContent = userRecord?.fullName || "—";
+  if (r.email) r.email.textContent = userRecord?.email || "—";
 
   const rawProvider = userRecord?.provider || "password";
-  r.provider.textContent = PROVIDER_LABELS[rawProvider] || rawProvider;
+  if (r.provider) r.provider.textContent = PROVIDER_LABELS[rawProvider] || rawProvider;
 
-  r.created.textContent = formatDate(userRecord?.createdAt);
+  if (r.created) r.created.textContent = formatDate(userRecord?.createdAt);
 };
 
 const loadProfile = async () => {
@@ -237,9 +235,8 @@ const handleEditProfileImage = (e) => {
   const reader = new FileReader();
 
   reader.onload = (ev) => {
-    r.avatarImg.src = ev.target.result;
-    r.avatarImg.hidden = false;
-    r.avatar.hidden = true;
+    if (r.avatarImg) { r.avatarImg.src = ev.target.result; r.avatarImg.hidden = false; }
+    if (r.avatar) r.avatar.hidden = true;
   };
 
   reader.readAsDataURL(file);

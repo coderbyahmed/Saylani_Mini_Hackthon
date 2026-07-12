@@ -1,0 +1,176 @@
+/* ==========================================================
+   ANALYTICS SECTION — Dashboard Analytics & Charts
+   ========================================================== */
+
+.analytics-section {
+  padding-top: 24px;
+  margin-bottom: 32px;
+}
+
+/* ---------- Summary Stat Cards ---------- */
+
+.analytics-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.analytics-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.analytics-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.analytics-card__icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.analytics-card--assets .analytics-card__icon {
+  background: rgba(59, 130, 246, 0.12);
+  color: #1d4ed8;
+}
+
+.analytics-card--active .analytics-card__icon {
+  background: rgba(16, 185, 129, 0.12);
+  color: #047857;
+}
+
+.analytics-card--due .analytics-card__icon {
+  background: rgba(249, 115, 22, 0.12);
+  color: #c2410c;
+}
+
+.analytics-card--total-issues .analytics-card__icon {
+  background: rgba(139, 92, 246, 0.12);
+  color: #6d28d9;
+}
+
+.analytics-card--open .analytics-card__icon {
+  background: rgba(249, 115, 22, 0.12);
+  color: #c2410c;
+}
+
+.analytics-card--progress .analytics-card__icon {
+  background: rgba(59, 130, 246, 0.12);
+  color: #1d4ed8;
+}
+
+.analytics-card--resolved .analytics-card__icon {
+  background: rgba(16, 185, 129, 0.12);
+  color: #047857;
+}
+
+.analytics-card--closed .analytics-card__icon {
+  background: rgba(107, 114, 128, 0.12);
+  color: #4b5563;
+}
+
+.analytics-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.analytics-card__label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.analytics-card__value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* ---------- Charts Row ---------- */
+
+.analytics-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.analytics-chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.analytics-chart-card__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 16px;
+}
+
+.analytics-chart-wrapper {
+  position: relative;
+}
+
+.analytics-chart-wrapper--doughnut {
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.analytics-chart-wrapper--bar {
+  height: 260px;
+}
+
+.analytics-chart-wrapper canvas {
+  max-height: 100%;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1100px) {
+  .analytics-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .analytics-charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .analytics-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-card__value {
+    font-size: 18px;
+  }
+}

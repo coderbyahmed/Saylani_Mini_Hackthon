@@ -1,20 +1,20 @@
 // ============================================================
-// ADD RECORD — UI CONTROLLER
-// Responsibility: Connect the Add Record modal/form with
+// ADD ASSET — UI CONTROLLER
+// Responsibility: Connect the Add Asset modal/form with
 // dashboardService. No business logic, no Firestore, no
 // Cloudinary calls, no validation rules.
 // ============================================================
 
 import { showSuccessToast, showErrorToast } from "../ui/toast.js";
 import { showButtonLoader, hideButtonLoader } from "../ui/loader.js";
-import { addRecord } from "../dashboard/dashboardService.js";
+import { addAsset } from "../dashboard/dashboardService.js";
 
 // ============================================================
 // CONSTANTS
 // ============================================================
 
 const ADD_BTN_SELECTOR = "#addRecordBtn";
-const CLOSE_BTN_SELECTOR = '[aria-label="Close add record modal"]';
+const CLOSE_BTN_SELECTOR = '[aria-label="Close add asset modal"]';
 
 // ============================================================
 // STATE
@@ -46,16 +46,11 @@ const cacheDOMRefs = () => {
     imageInput: document.getElementById("addRecordImage"),
     imagePreview: document.getElementById("addRecordImagePreview"),
     avatarCircle: document.getElementById("addRecordAvatar"),
-    fullName: document.getElementById("addFullName"),
-    guardianName: document.getElementById("addGuardianName"),
-    email: document.getElementById("addEmail"),
-    phone: document.getElementById("addPhone"),
-    altPhone: document.getElementById("addAltPhone"),
-    gender: document.getElementById("addGender"),
-    dob: document.getElementById("addDob"),
-    country: document.getElementById("addCountry"),
-    city: document.getElementById("addCity"),
-    address: document.getElementById("addAddress"),
+    assetName: document.getElementById("addAssetName"),
+    assetId: document.getElementById("addAssetId"),
+    category: document.getElementById("addCategory"),
+    location: document.getElementById("addLocation"),
+    lastMaintenance: document.getElementById("addLastMaintenance"),
     status: document.getElementById("addStatus"),
   };
 
@@ -72,6 +67,8 @@ const openModal = () => {
 
   modal.hidden = false;
   document.body.style.overflow = "hidden";
+
+  generateAssetId();
 };
 
 // ============================================================
@@ -87,6 +84,23 @@ const closeModal = () => {
 };
 
 // ============================================================
+// GENERATE ASSET ID
+// Auto-generates an asset ID like "AST-A1B2C3"
+// ============================================================
+
+const generateAssetId = () => {
+  const { assetId } = cacheDOMRefs();
+  if (!assetId) return;
+
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let id = "AST-";
+  for (let i = 0; i < 6; i++) {
+    id += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  assetId.value = id;
+};
+
+// ============================================================
 // IMAGE PREVIEW
 // ============================================================
 
@@ -96,20 +110,17 @@ const handleImageChange = () => {
 
   if (!imagePreview) return;
 
-  // Revoke previous object URL to avoid memory leaks
   if (currentObjectUrl) {
     URL.revokeObjectURL(currentObjectUrl);
     currentObjectUrl = null;
   }
 
-  // No file selected → restore default placeholder
   if (!file) {
     imagePreview.classList.remove("visible");
     imagePreview.removeAttribute("src");
     return;
   }
 
-  // Validate file is an image before previewing
   if (!file.type.startsWith("image/")) {
     imageInput.value = "";
     showErrorToast("Please select a valid image file.");
@@ -131,18 +142,13 @@ const getFormData = () => {
   const r = cacheDOMRefs();
 
   return {
-    fullName: r.fullName.value.trim(),
-    referenceName: r.guardianName.value.trim(),
-    email: r.email.value.trim(),
-    phoneNumber: r.phone.value.trim(),
-    alternatePhoneNumber: r.altPhone.value.trim(),
-    gender: r.gender.value,
-    dateOfBirth: r.dob.value,
-    country: r.country.value.trim(),
-    city: r.city.value.trim(),
-    address: r.address.value.trim(),
+    assetName: r.assetName.value.trim(),
+    assetId: r.assetId.value.trim(),
+    category: r.category.value,
+    location: r.location.value.trim(),
+    lastMaintenance: r.lastMaintenance.value,
     status: r.status.value,
-    profileImage: r.imageInput?.files?.[0] || null,
+    assetImage: r.imageInput?.files?.[0] || null,
   };
 };
 
@@ -155,13 +161,11 @@ const resetForm = () => {
 
   r.form.reset();
 
-  // Clear image preview
   if (r.imagePreview) {
     r.imagePreview.classList.remove("visible");
     r.imagePreview.removeAttribute("src");
   }
 
-  // Revoke object URL
   if (currentObjectUrl) {
     URL.revokeObjectURL(currentObjectUrl);
     currentObjectUrl = null;
@@ -178,25 +182,25 @@ const handleSubmit = async (e) => {
   if (isSubmitting) return;
 
   const { submitBtn } = cacheDOMRefs();
-  const recordData = getFormData();
+  const assetData = getFormData();
 
   isSubmitting = true;
   showButtonLoader(submitBtn);
 
   try {
 
-    await addRecord(recordData);
+    await addAsset(assetData);
 
-    showSuccessToast("Record added successfully.");
+    showSuccessToast("Asset added successfully.");
     resetForm();
     closeModal();
     document.dispatchEvent(new CustomEvent("record-added", {
-      detail: { name: recordData.fullName }
+      detail: { name: assetData.assetName }
     }));
 
   } catch (error) {
 
-    showErrorToast(error.message || "Failed to add record. Please try again.");
+    showErrorToast(error.message || "Failed to add asset. Please try again.");
 
   } finally {
 
@@ -213,12 +217,10 @@ const handleSubmit = async (e) => {
 const setupEventListeners = () => {
   const r = cacheDOMRefs();
 
-  // Open
   if (r.addBtn) {
     r.addBtn.addEventListener("click", openModal);
   }
 
-  // Close buttons
   if (r.closeBtn) {
     r.closeBtn.addEventListener("click", closeModal);
   }
@@ -227,33 +229,28 @@ const setupEventListeners = () => {
     r.cancelBtn.addEventListener("click", closeModal);
   }
 
-  // Outside click
   if (r.modal) {
     r.modal.addEventListener("click", (e) => {
       if (e.target === r.modal) closeModal();
     });
   }
 
-  // Escape key
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && r.modal && !r.modal.hidden && !isSubmitting) {
       closeModal();
     }
   });
 
-  // Avatar click → file input
   if (r.avatarCircle) {
     r.avatarCircle.addEventListener("click", () => {
       r.imageInput?.click();
     });
   }
 
-  // Image input
   if (r.imageInput) {
     r.imageInput.addEventListener("change", handleImageChange);
   }
 
-  // Form submit
   if (r.form) {
     r.form.addEventListener("submit", handleSubmit);
   }
@@ -263,7 +260,7 @@ const setupEventListeners = () => {
 // INIT
 // ============================================================
 
-const initAddRecord = () => {
+const initAddAsset = () => {
   if (initialized) return;
   initialized = true;
 
@@ -274,4 +271,4 @@ const initAddRecord = () => {
   setupEventListeners();
 };
 
-export { initAddRecord };
+export { initAddAsset };

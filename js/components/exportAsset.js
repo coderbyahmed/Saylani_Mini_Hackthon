@@ -1,6 +1,6 @@
 // ============================================================
-// EXPORT RECORD — UI CONTROLLER
-// Responsibility: Read currently visible records from the
+// EXPORT ASSET — UI CONTROLLER
+// Responsibility: Read currently visible assets from the
 // table DOM, generate a professional PDF report using jsPDF +
 // jspdf-autotable, and trigger the file download.
 // No Firestore queries, no business logic.
@@ -45,9 +45,7 @@ const cacheDOMRefs = () => {
 };
 
 // ============================================================
-// PRIVATE — GET VISIBLE RECORDS
-// Reads the currently rendered table rows from the DOM.
-// Returns an array of { name, email, phone, status, date }.
+// PRIVATE — GET VISIBLE ASSETS
 // ============================================================
 
 const getVisibleRecords = () => {
@@ -62,11 +60,10 @@ const getVisibleRecords = () => {
     if (cells.length < 6) return;
 
     records.push({
-      name: cells[1].textContent.trim(),
-      email: cells[2].textContent.trim(),
-      phone: cells[3].textContent.trim(),
+      assetName: cells[1].textContent.trim(),
+      assetId: cells[2].textContent.trim(),
+      category: cells[3].textContent.trim(),
       status: cells[4].textContent.trim(),
-      date: cells[5].textContent.trim(),
     });
   });
 
@@ -75,16 +72,12 @@ const getVisibleRecords = () => {
 
 // ============================================================
 // PRIVATE — CHECK IF TABLE HAS VISIBLE DATA
-// Returns true when the table is shown and contains rows.
 // ============================================================
 
 const hasVisibleData = () => {
   const { table, empty } = cacheDOMRefs();
 
-  // Table is hidden (empty state shown or loading)
   if (table && table.hidden) return false;
-
-  // Empty state is visible
   if (empty && !empty.hidden) return false;
 
   const records = getVisibleRecords();
@@ -93,7 +86,6 @@ const hasVisibleData = () => {
 
 // ============================================================
 // PRIVATE — FORMAT DATE FOR HEADER
-// Returns a friendly date string like "July 10, 2026".
 // ============================================================
 
 const formatHeaderDate = (date) => {
@@ -106,7 +98,6 @@ const formatHeaderDate = (date) => {
 
 // ============================================================
 // PRIVATE — FORMAT TIME FOR HEADER
-// Returns a friendly time string like "02:30 PM".
 // ============================================================
 
 const formatHeaderTime = (date) => {
@@ -118,8 +109,6 @@ const formatHeaderTime = (date) => {
 
 // ============================================================
 // PRIVATE — GENERATE PDF
-// Builds a professional PDF with header info and auto-table.
-// Triggers the file download.
 // ============================================================
 
 const generatePDF = (records) => {
@@ -129,39 +118,37 @@ const generatePDF = (records) => {
   const now = new Date();
   const pageWidth = doc.internal.pageSize.getWidth();
 
-  // --------------------------------------------------
-  // Header
-  // --------------------------------------------------
-
   // Title
   doc.setFontSize(20);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(33, 37, 41);
-  doc.text("Student Management System", pageWidth / 2, 22, { align: "center" });
+  doc.text("Asset Maintenance System", pageWidth / 2, 22, { align: "center" });
 
   // Subtitle
   doc.setFontSize(12);
   doc.setFont("helvetica", "normal");
   doc.setTextColor(100, 116, 139);
-  doc.text("Records Report", pageWidth / 2, 30, { align: "center" });
+  doc.text("Assets Report", pageWidth / 2, 30, { align: "center" });
 
   // Horizontal rule
   doc.setDrawColor(200, 200, 210);
   doc.setLineWidth(0.5);
   doc.line(14, 36, pageWidth - 14, 36);
 
-  // Metadata — left aligned below the rule
+  // Metadata
   doc.setFontSize(9);
   doc.setTextColor(108, 117, 125);
   doc.text(`Generated: ${formatHeaderDate(now)} at ${formatHeaderTime(now)}`, 14, 44);
-  doc.text(`Total Records: ${records.length}`, 14, 50);
+  doc.text(`Total Assets: ${records.length}`, 14, 50);
 
-  // --------------------------------------------------
   // Table
-  // --------------------------------------------------
-
-  const headRows = [["Full Name", "Email", "Phone Number", "Status", "Created Date"]];
-  const bodyRows = records.map((r) => [r.name, r.email, r.phone, r.status, r.date]);
+  const headRows = [["Asset Name", "Asset ID", "Category", "Status"]];
+  const bodyRows = records.map((r) => [
+    r.assetName,
+    r.assetId,
+    r.category,
+    r.status,
+  ]);
 
   doc.autoTable({
     head: headRows,
@@ -186,11 +173,10 @@ const generatePDF = (records) => {
       fillColor: [248, 250, 252],
     },
     columnStyles: {
-      0: { cellWidth: 40 },
-      1: { cellWidth: 46 },
-      2: { cellWidth: 34 },
-      3: { cellWidth: 28 },
-      4: { cellWidth: 34 },
+      0: { cellWidth: 50 },
+      1: { cellWidth: 40 },
+      2: { cellWidth: 40 },
+      3: { cellWidth: 30 },
     },
     theme: "grid",
     styles: {
@@ -199,10 +185,7 @@ const generatePDF = (records) => {
     },
   });
 
-  // --------------------------------------------------
-  // Footer — page number on each page
-  // --------------------------------------------------
-
+  // Footer
   const pageCount = doc.internal.getNumberOfPages();
 
   for (let i = 1; i <= pageCount; i++) {
@@ -217,17 +200,13 @@ const generatePDF = (records) => {
     );
   }
 
-  // --------------------------------------------------
   // Download
-  // --------------------------------------------------
-
   const datePart = now.toISOString().slice(0, 10);
-  doc.save(`student-records-${datePart}.pdf`);
+  doc.save(`asset-maintenance-${datePart}.pdf`);
 };
 
 // ============================================================
 // PRIVATE — HANDLE EXPORT CLICK
-// Validation, button loader, PDF generation, error handling.
 // ============================================================
 
 const handleExportClick = async () => {
@@ -236,7 +215,7 @@ const handleExportClick = async () => {
   const { exportBtn } = cacheDOMRefs();
 
   if (!hasVisibleData()) {
-    showErrorToast("No records available to export.");
+    showErrorToast("No assets available to export.");
     return;
   }
 
@@ -245,12 +224,10 @@ const handleExportClick = async () => {
 
   try {
 
-    // Intentional 2-second delay so the button spinner is visible
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const records = getVisibleRecords();
 
-    // Ensure jsPDF and autotable are loaded
     if (!window.jspdf || typeof window.jspdf.jsPDF !== "function") {
       throw new Error("PDF library is not loaded. Please check your internet connection.");
     }
@@ -259,7 +236,7 @@ const handleExportClick = async () => {
 
   } catch (error) {
 
-    showErrorToast(error.message || "Failed to export records. Please try again.");
+    showErrorToast(error.message || "Failed to export assets. Please try again.");
 
   } finally {
 
@@ -285,7 +262,7 @@ const setupEventListeners = () => {
 // INIT
 // ============================================================
 
-const initExportRecord = () => {
+const initExportAsset = () => {
   if (initialized) return;
   initialized = true;
 
@@ -296,4 +273,4 @@ const initExportRecord = () => {
   setupEventListeners();
 };
 
-export { initExportRecord };
+export { initExportAsset };

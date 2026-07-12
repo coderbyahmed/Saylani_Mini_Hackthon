@@ -1,11 +1,11 @@
 // ============================================================
-// RECORDS TABLE — UI CONTROLLER
-// Responsibility: Fetch records from Firestore and render the
-// records table. Handles loading, empty, and error states.
+// ASSETS TABLE — UI CONTROLLER
+// Responsibility: Fetch assets from Firestore and render the
+// assets table. Handles loading, empty, and error states.
 // No business logic, no Firestore queries, no Firebase calls.
 // ============================================================
 
-import { fetchRecords } from "../dashboard/dashboardService.js";
+import { fetchAssets } from "../dashboard/dashboardService.js";
 import { showErrorToast } from "../ui/toast.js";
 
 // ============================================================
@@ -24,7 +24,7 @@ const EMPTY_ADD_BTN_SELECTOR = "#emptyAddRecordBtn";
 // ============================================================
 
 let initialized = false;
-let allRecords = [];
+let allAssets = [];
 let fullDataSet = [];
 
 // ============================================================
@@ -90,7 +90,7 @@ const formatDate = (timestamp) => {
 
 // ============================================================
 // PRIVATE — GET INITIALS
-// Extracts initials from a full name for the avatar fallback.
+// Extracts initials from a name for the avatar fallback.
 // ============================================================
 
 const getInitials = (name) => {
@@ -123,27 +123,26 @@ const getBadgeClass = (status) => {
 
 // ============================================================
 // PRIVATE — BUILD TABLE ROW
-// Creates a single <tr> element from a record object.
+// Creates a single <tr> element from an asset object.
 // ============================================================
 
-const buildRow = (record) => {
+const buildRow = (asset) => {
   const tr = document.createElement("tr");
-  tr.dataset.recordId = record.id;
+  tr.dataset.recordId = asset.id;
 
-  const initials = getInitials(record.fullName);
-  const imageHtml = record.profileImageUrl
-    ? `<img src="${record.profileImageUrl}" alt="${record.fullName}" class="table-avatar-img" />`
+  const initials = getInitials(asset.assetName);
+  const imageHtml = asset.assetImageUrl
+    ? `<img src="${asset.assetImageUrl}" alt="${asset.assetName}" class="table-avatar-img" />`
     : `<span class="table-avatar" aria-hidden="true">${initials}</span>`;
 
-  const statusClass = getBadgeClass(record.status);
+  const statusClass = getBadgeClass(asset.status);
 
   tr.innerHTML = `
     <td>${imageHtml}</td>
-    <td>${record.fullName || "—"}</td>
-    <td class="td-email"><span>${record.email || "—"}</span></td>
-    <td class="td-phone">${record.phoneNumber || "—"}</td>
-    <td><span class="${statusClass}">${record.status || "—"}</span></td>
-    <td>${formatDate(record.createdAt)}</td>
+    <td>${asset.assetName || "—"}</td>
+    <td><span class="td-asset-id">${asset.assetId || "—"}</span></td>
+    <td>${asset.category || "—"}</td>
+    <td><span class="${statusClass}">${asset.status || "—"}</span></td>
     <td>
       <div class="action-buttons">
         <button type="button" class="view-btn" aria-label="View">View</button>
@@ -157,55 +156,50 @@ const buildRow = (record) => {
 };
 
 // ============================================================
-// PRIVATE — RENDER RECORDS
-// Clears the tbody and appends rows for each record.
-// Updates the heading with the record count.
+// PRIVATE — RENDER ASSETS
+// Clears the tbody and appends rows for each asset.
+// Updates the heading with the asset count.
 // ============================================================
 
-const renderRecords = (records, options = {}) => {
+const renderAssets = (assets, options = {}) => {
   const { tbody, heading, table, empty, loader } = cacheDOMRefs();
 
   if (!tbody) return;
 
-  // Clear existing rows
   tbody.innerHTML = "";
 
-  if (records.length === 0) {
-    // Show empty state, hide table and loader
+  if (assets.length === 0) {
     if (table) table.hidden = true;
     if (empty) {
       empty.hidden = false;
       const title = empty.querySelector("h3");
       const desc = empty.querySelector("p");
-      if (title) title.textContent = options.emptyTitle || "No records found";
-      if (desc) desc.textContent = options.emptyDesc || "Add your first record to get started.";
+      if (title) title.textContent = options.emptyTitle || "No assets found";
+      if (desc) desc.textContent = options.emptyDesc || "Add your first asset to get started.";
     }
     if (loader) loader.hidden = true;
-    if (heading) heading.textContent = options.headingText || "All Records";
+    if (heading) heading.textContent = options.headingText || "All Assets";
     document.dispatchEvent(new CustomEvent("records-updated", { detail: { records: [] } }));
     return;
   }
 
-  // Render rows
-  records.forEach((record) => {
-    const row = buildRow(record);
+  assets.forEach((asset) => {
+    const row = buildRow(asset);
     tbody.appendChild(row);
   });
 
-  // Show table, hide empty state and loader
   if (table) table.hidden = false;
   if (empty) empty.hidden = true;
   if (loader) loader.hidden = true;
-  if (heading) heading.textContent = options.headingText || `All Records (${records.length})`;
+  if (heading) heading.textContent = options.headingText || `All Assets (${assets.length})`;
 
-  // Notify pagination when the rendered dataset changes
-  document.dispatchEvent(new CustomEvent("records-updated", { detail: { records } }));
+  document.dispatchEvent(new CustomEvent("records-updated", { detail: { records: assets } }));
 };
 
 // ============================================================
 // PRIVATE — HANDLE LOAD ERROR
 // Shows the empty state with an error message when fetching
-// records fails.
+// assets fails.
 // ============================================================
 
 const handleLoadError = (message) => {
@@ -218,38 +212,37 @@ const handleLoadError = (message) => {
     empty.hidden = false;
     const title = empty.querySelector("h3");
     const desc = empty.querySelector("p");
-    if (title) title.textContent = "Failed to load records";
-    if (desc) desc.textContent = message || "An error occurred while fetching records. Please try again.";
+    if (title) title.textContent = "Failed to load assets";
+    if (desc) desc.textContent = message || "An error occurred while fetching assets. Please try again.";
   }
 
-  if (heading) heading.textContent = "All Records";
+  if (heading) heading.textContent = "All Assets";
 
-  showErrorToast(message || "Failed to load records.");
+  showErrorToast(message || "Failed to load assets.");
 };
 
 // ============================================================
 // PUBLIC — LOAD AND RENDER
-// Fetches records from Firestore and renders the table.
-// Shows loader during fetch, empty state if no records.
+// Fetches assets from Firestore and renders the table.
+// Shows loader during fetch, empty state if no assets.
 // Can be called externally to refresh the table.
 // ============================================================
 
 const loadAndRender = async () => {
   const { loader, table, empty, heading } = cacheDOMRefs();
 
-  // Show loader, hide table and empty state
   if (loader) loader.hidden = false;
   if (table) table.hidden = true;
   if (empty) empty.hidden = true;
-  if (heading) heading.textContent = "All Records";
+  if (heading) heading.textContent = "All Assets";
 
   try {
 
-    const records = await fetchRecords();
-    allRecords = records;
-    fullDataSet = records;
-    // Dispatch event so pagination can take over the render
-    document.dispatchEvent(new CustomEvent("records-updated", { detail: { records } }));
+    const assets = await fetchAssets();
+    allAssets = assets;
+    fullDataSet = assets;
+    document.dispatchEvent(new CustomEvent("records-updated", { detail: { records: assets } }));
+    renderAssets(assets);
 
   } catch (error) {
 
@@ -265,7 +258,6 @@ const loadAndRender = async () => {
 const setupEventListeners = () => {
   const { emptyAddBtn } = cacheDOMRefs();
 
-  // Empty state "Add Record" button triggers the existing modal
   if (emptyAddBtn) {
     emptyAddBtn.addEventListener("click", () => {
       const addBtn = document.querySelector("#addRecordBtn");
@@ -273,7 +265,6 @@ const setupEventListeners = () => {
     });
   }
 
-  // Listen for record-added event to refresh the table
   document.addEventListener("record-added", loadAndRender);
 };
 
@@ -281,7 +272,7 @@ const setupEventListeners = () => {
 // INIT
 // ============================================================
 
-const initRecordsTable = () => {
+const initAssetsTable = () => {
   if (initialized) return;
   initialized = true;
 
@@ -291,13 +282,13 @@ const initRecordsTable = () => {
 };
 
 // ============================================================
-// PUBLIC — GET CACHED RECORDS
-// Returns the in-memory records array (no Firestore query).
+// PUBLIC — GET CACHED ASSETS
+// Returns the in-memory assets array (no Firestore query).
 // Used by the filter module for client-side filtering.
 // ============================================================
 
-const getCachedRecords = () => allRecords;
+const getCachedRecords = () => allAssets;
 
 const getFullDataSet = () => fullDataSet;
 
-export { initRecordsTable, loadAndRender as refreshRecordsTable, renderRecords, getCachedRecords, getFullDataSet };
+export { initAssetsTable, loadAndRender as refreshAssetsTable, renderAssets, getCachedRecords, getFullDataSet };

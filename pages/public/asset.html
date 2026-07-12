@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Public asset details page" />
+    <title>Asset Details</title>
+    <link rel="stylesheet" href="../../css/dashboard/dashboard.css" />
+    <link rel="stylesheet" href="../../css/ui/toast.css" />
+    <link rel="stylesheet" href="../../css/public/asset.css" />
+</head>
+
+<body>
+    <div class="public-shell">
+        <main class="public-main">
+            <section class="public-intro">
+                <div class="public-intro__content">
+                    <p class="eyebrow">Public Asset Viewer</p>
+                    <h1>Asset details</h1>
+                    <p>Open this page directly to view asset information without logging in.</p>
+                </div>
+            </section>
+
+            <section class="asset-view-section">
+                <div class="asset-card" id="assetCard" hidden>
+                    <div class="asset-card__media" id="assetImageContainer">
+                    </div>
+                    <div class="asset-card__details">
+                        <div class="asset-card__header">
+                            <div>
+                                <p class="asset-card__label">Asset Name</p>
+                                <h2 id="assetName">—</h2>
+                            </div>
+                            <span class="status-badge status-pending" id="assetStatus">—</span>
+                        </div>
+
+                        <div class="asset-meta-grid">
+                            <div class="asset-meta-item">
+                                <p class="asset-meta-title">Asset ID</p>
+                                <p id="assetId">—</p>
+                            </div>
+                            <div class="asset-meta-item">
+                                <p class="asset-meta-title">Category</p>
+                                <p id="assetCategory">—</p>
+                            </div>
+                            <div class="asset-meta-item">
+                                <p class="asset-meta-title">Location</p>
+                                <p id="assetLocation">—</p>
+                            </div>
+                            <div class="asset-meta-item">
+                                <p class="asset-meta-title">Last Maintenance</p>
+                                <p id="assetMaintenance">—</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="empty-state" id="assetNotFound" hidden>
+                    <div class="empty-state__icon" aria-hidden="true">⚠️</div>
+                    <h2>Asset not found</h2>
+                    <p>We could not find an asset matching this asset ID. Please check the link and try
+                        again.</p>
+                    <a href="../../index.html" class="primary-button">Return home</a>
+                </div>
+            </section>
+
+            <section class="report-issue-section" id="reportIssueSection" hidden>
+                <div class="report-card">
+                    <div class="report-card__header">
+                        <p class="eyebrow">Report an Issue</p>
+                        <h2>Tell us what went wrong</h2>
+                        <p>Fill in the details below and our team will review the issue.</p>
+                    </div>
+
+                    <form id="reportIssueForm" novalidate>
+                        <div class="form-grid report-form-grid">
+                            <label for="reporterName">
+                                Reporter Name
+                                <input type="text" id="reporterName" name="reporterName" placeholder="Your name"
+                                    autocomplete="name" />
+                                <span class="field-error" id="reporterNameError" aria-live="polite"></span>
+                            </label>
+
+                            <label for="reporterEmail">
+                                Reporter Email
+                                <input type="email" id="reporterEmail" name="reporterEmail"
+                                    placeholder="your@example.com" autocomplete="email" />
+                                <span class="field-error" id="reporterEmailError" aria-live="polite"></span>
+                            </label>
+
+                            <label for="issueTitle" class="full-width">
+                                Issue Title
+                                <input type="text" id="issueTitle" name="issueTitle" placeholder="Short summary" />
+                                <span class="field-error" id="issueTitleError" aria-live="polite"></span>
+                            </label>
+
+                            <label for="issueDescription" class="full-width">
+                                Issue Description
+                                <textarea id="issueDescription" name="issueDescription"
+                                    placeholder="Describe the problem" rows="5"></textarea>
+                                <span class="field-error" id="issueDescriptionError" aria-live="polite"></span>
+                            </label>
+
+                            <label for="issuePhoto" class="full-width">
+                                Upload Photo (optional)
+                                <input type="file" id="issuePhoto" name="issuePhoto" accept="image/*" />
+                            </label>
+                        </div>
+
+                        <div class="report-actions">
+                            <button type="submit" class="primary-button">Report Issue</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="../../js/public/assetDetails.js"></script>
+    <script type="module" src="../../js/public/reportIssue.js"></script>
+</body>
+
+</html>

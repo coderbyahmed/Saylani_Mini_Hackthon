@@ -1,12 +1,12 @@
 // ============================================================
 // PAGINATION — UI CONTROLLER
-// Responsibility: Slice the records array into pages (10/page),
-// render page controls, and call renderRecords with the slice.
-// Integrates with recordsTable and recordsFilter via
+// Responsibility: Slice the assets array into pages (10/page),
+// render page controls, and call renderAssets with the slice.
+// Integrates with assetsTable and assetsFilter via
 // records-updated custom events.
 // ============================================================
 
-import { renderRecords, getFullDataSet } from "./recordsTable.js";
+import { renderAssets, getFullDataSet } from "./assetsTable.js";
 
 // ============================================================
 // CONSTANTS
@@ -109,10 +109,10 @@ const goToPage = (page) => {
   const slice = currentDataset.slice(start, end);
 
   const emptyText = currentDataset.length === 0 && getFullDataSet().length > 0
-    ? { emptyTitle: "No matching records found", emptyDesc: "Try adjusting your search or filter criteria." }
+    ? { emptyTitle: "No matching assets found", emptyDesc: "Try adjusting your search or filter criteria." }
     : {};
 
-  renderRecords(slice, emptyText);
+  renderAssets(slice, emptyText);
   renderControls(currentPage, totalPages);
 
   isPaginating = false;
@@ -136,7 +136,7 @@ const onRecordsUpdated = (e) => {
   if (totalPages <= 1) {
     isPaginating = true;
     renderControls(1, 1);
-    renderRecords(currentDataset);
+    renderAssets(currentDataset);
     isPaginating = false;
     return;
   }

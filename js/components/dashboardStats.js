@@ -1,14 +1,14 @@
 // ============================================================
-// DASHBOARD CARD — UI CONTROLLER
+// DASHBOARD STATS — UI CONTROLLER
 // Responsibility: Render the four overview stat cards (Total,
 // Active, Pending, Archived) from a single Firestore fetch.
-// Reuses in-memory cached records when available.
+// Reuses in-memory cached assets when available.
 // No business logic, no Firestore queries of its own beyond
 // the initial load if cache is empty.
 // ============================================================
 
-import { getFullDataSet } from "./recordsTable.js";
-import { fetchRecords } from "../dashboard/dashboardService.js";
+import { getFullDataSet } from "./assetsTable.js";
+import { fetchAssets } from "../dashboard/dashboardService.js";
 
 // ============================================================
 // CONSTANTS
@@ -29,7 +29,7 @@ let initialized = false;
 
 // ============================================================
 // PRIVATE — UPDATE CARDS
-// Accepts the full records array, computes the four counts,
+// Accepts the full assets array, computes the four counts,
 // and updates the DOM stat-value elements.
 // ============================================================
 
@@ -53,8 +53,7 @@ const updateCards = (records) => {
 // ============================================================
 // PRIVATE — LOAD COUNTS
 // Reads from the in-memory cache if available, otherwise
-// performs a single Firestore fetch. Falls back gracefully
-// on error without crashing the dashboard.
+// performs a single Firestore fetch.
 // ============================================================
 
 const loadCounts = async () => {
@@ -62,9 +61,9 @@ const loadCounts = async () => {
 
   if (records.length === 0) {
     try {
-      records = await fetchRecords();
+      records = await fetchAssets();
     } catch (error) {
-      console.error("DashboardCard: fetch failed —", error.message);
+      console.error("DashboardStats: fetch failed —", error.message);
       return;
     }
   }
@@ -73,9 +72,7 @@ const loadCounts = async () => {
 };
 
 // ============================================================
-// PRIVATE — HANDLE RECORDS UPDATED
-// Reads from the full in-memory dataset (which is refreshed
-// by recordsTable on every CRUD operation).
+// PRIVATE — HANDLE ASSETS UPDATED
 // ============================================================
 
 const onRecordsUpdated = () => {
@@ -97,7 +94,7 @@ const setupEventListeners = () => {
 // INIT
 // ============================================================
 
-const initDashboardCard = () => {
+const initDashboardStats = () => {
   if (initialized) return;
   initialized = true;
 
@@ -105,4 +102,4 @@ const initDashboardCard = () => {
   setupEventListeners();
 };
 
-export { initDashboardCard };
+export { initDashboardStats };

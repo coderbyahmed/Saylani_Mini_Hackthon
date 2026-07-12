@@ -22,7 +22,7 @@ import {
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 import { uploadImage } from "./storageService.js";
-import { validateRecord } from "../validations/dashboardValidations.js";
+import { validateAsset } from "../validations/dashboardValidations.js";
 
 // ============================================================
 // CONSTANTS
@@ -31,6 +31,20 @@ import { validateRecord } from "../validations/dashboardValidations.js";
 const COLLECTION_NAME = "recordData";
 const NOTIFICATIONS_COLLECTION = "notifications";
 const MAX_NOTIFICATIONS = 5;
+
+// ============================================================
+// PRIVATE — GENERATE ASSET ID
+// Auto-generates an asset ID like "AST-A1B2C3"
+// ============================================================
+
+const generateAssetId = () => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let id = "AST-";
+  for (let i = 0; i < 6; i++) {
+    id += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return id;
+};
 
 // ============================================================
 // NOTIFICATIONS
@@ -119,19 +133,14 @@ const maintainNotificationLimit = async () => {
 const buildDocument = (data, cloudinaryResult = null) => {
 
   const doc = {
-    fullName: data.fullName,
-    referenceName: data.referenceName || "",
-    email: data.email,
-    phoneNumber: data.phoneNumber,
-    city: data.city,
-    country: data.country,
-    address: data.address,
-    dateOfBirth: data.dateOfBirth,
-    gender: data.gender,
+    assetName: data.assetName,
+    assetId: data.assetId || "",
+    category: data.category || "",
+    location: data.location || "",
     status: data.status,
-    alternatePhoneNumber: data.alternatePhoneNumber || "",
-    profileImageUrl: cloudinaryResult ? cloudinaryResult.imageUrl : "",
-    profileImagePublicId: cloudinaryResult ? cloudinaryResult.publicId : "",
+    lastMaintenance: data.lastMaintenance || "",
+    assetImageUrl: cloudinaryResult ? cloudinaryResult.imageUrl : "",
+    assetImagePublicId: cloudinaryResult ? cloudinaryResult.publicId : "",
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   };
@@ -141,22 +150,26 @@ const buildDocument = (data, cloudinaryResult = null) => {
 };
 
 // ============================================================
-// PUBLIC — ADD RECORD
+// PUBLIC — ADD ASSET
 // Validates form data, uploads image if present, saves to
 // Firestore. Throws on failure. Returns { success, id }.
 // ============================================================
 
-const addRecord = async (recordData) => {
+const addAsset = async (assetData) => {
 
   try {
 
-    const { profileImage, ...fields } = recordData;
+    const { assetImage, ...fields } = assetData;
+
+    if (!fields.assetId || fields.assetId.trim() === "") {
+      fields.assetId = generateAssetId();
+    }
 
     // --------------------------------------------------
     // 1. Validate
     // --------------------------------------------------
 
-    const validation = validateRecord(fields);
+    const validation = validateAsset(fields);
 
     if (!validation.success) {
       throw new Error(validation.message);
@@ -168,8 +181,8 @@ const addRecord = async (recordData) => {
 
     let cloudinaryResult = null;
 
-    if (profileImage) {
-      cloudinaryResult = await uploadImage(profileImage);
+    if (assetImage) {
+      cloudinaryResult = await uploadImage(assetImage);
     }
 
     // --------------------------------------------------
@@ -187,7 +200,7 @@ const addRecord = async (recordData) => {
 
   } catch (error) {
 
-    console.error("DashboardService: addRecord failed —", error.message);
+    console.error("DashboardService: addAsset failed —", error.message);
 
     throw error;
 
@@ -196,13 +209,13 @@ const addRecord = async (recordData) => {
 };
 
 // ============================================================
-// PUBLIC — FETCH RECORDS
-// Retrieves all documents from the records collection ordered
+// PUBLIC — FETCH ASSETS
+// Retrieves all documents from the assets collection ordered
 // by createdAt descending. Returns an array of { id, ...data }.
 // Throws on failure.
 // ============================================================
 
-const fetchRecords = async () => {
+const fetchAssets = async () => {
 
   try {
 
@@ -213,21 +226,21 @@ const fetchRecords = async () => {
 
     const snapshot = await getDocs(q);
 
-    const records = [];
+    const assets = [];
 
     snapshot.forEach((doc) => {
       const data = doc.data();
-      records.push({
+      assets.push({
         id: doc.id,
         ...data,
       });
     });
 
-    return records;
+    return assets;
 
   } catch (error) {
 
-    console.error("DashboardService: fetchRecords failed —", error.message);
+    console.error("DashboardService: fetchAssets failed —", error.message);
 
     throw error;
 
@@ -236,17 +249,17 @@ const fetchRecords = async () => {
 };
 
 // ============================================================
-// PUBLIC — FETCH RECORD BY ID
-// Retrieves a single document from the records collection.
+// PUBLIC — FETCH ASSET BY ID
+// Retrieves a single document from the assets collection.
 // Returns { id, ...data } or null if not found.
 // Throws on failure.
 // ============================================================
 
-const fetchRecordById = async (recordId) => {
+const fetchAssetById = async (assetId) => {
 
   try {
 
-    const docRef = doc(db, COLLECTION_NAME, recordId);
+    const docRef = doc(db, COLLECTION_NAME, assetId);
     const snapshot = await getDoc(docRef);
 
     if (!snapshot.exists()) {
@@ -260,7 +273,7 @@ const fetchRecordById = async (recordId) => {
 
   } catch (error) {
 
-    console.error("DashboardService: fetchRecordById failed —", error.message);
+    console.error("DashboardService: fetchAssetById failed —", error.message);
 
     throw error;
 
@@ -269,23 +282,23 @@ const fetchRecordById = async (recordId) => {
 };
 
 // ============================================================
-// PUBLIC — UPDATE RECORD
+// PUBLIC — UPDATE ASSET
 // Validates form data, uploads new image if changed, updates
 // the Firestore document. Preserves createdAt.
 // Returns { success } or throws on failure.
 // ============================================================
 
-const updateRecord = async (recordId, recordData) => {
+const updateAsset = async (assetId, assetData) => {
 
   try {
 
-    const { profileImage, ...fields } = recordData;
+    const { assetImage, ...fields } = assetData;
 
     // --------------------------------------------------
     // 1. Validate
     // --------------------------------------------------
 
-    const validation = validateRecord(fields);
+    const validation = validateAsset(fields);
 
     if (!validation.success) {
       throw new Error(validation.message);
@@ -304,17 +317,17 @@ const updateRecord = async (recordId, recordData) => {
     // 3. Upload new image (if changed)
     // --------------------------------------------------
 
-    if (profileImage) {
-      const cloudinaryResult = await uploadImage(profileImage);
-      updatePayload.profileImageUrl = cloudinaryResult.imageUrl;
-      updatePayload.profileImagePublicId = cloudinaryResult.publicId;
+    if (assetImage) {
+      const cloudinaryResult = await uploadImage(assetImage);
+      updatePayload.assetImageUrl = cloudinaryResult.imageUrl;
+      updatePayload.assetImagePublicId = cloudinaryResult.publicId;
     }
 
     // --------------------------------------------------
     // 4. Update Firestore
     // --------------------------------------------------
 
-    await updateDoc(doc(db, COLLECTION_NAME, recordId), updatePayload);
+    await updateDoc(doc(db, COLLECTION_NAME, assetId), updatePayload);
 
     return {
       success: true,
@@ -322,7 +335,7 @@ const updateRecord = async (recordId, recordData) => {
 
   } catch (error) {
 
-    console.error("DashboardService: updateRecord failed —", error.message);
+    console.error("DashboardService: updateAsset failed —", error.message);
 
     throw error;
 
@@ -331,17 +344,17 @@ const updateRecord = async (recordId, recordData) => {
 };
 
 // ============================================================
-// PUBLIC — DELETE RECORD
+// PUBLIC — DELETE ASSET
 // Permanently deletes the Firestore document matching the
-// given record ID. Does NOT delete Cloudinary images.
+// given asset ID. Does NOT delete Cloudinary images.
 // Returns { success } or throws on failure.
 // ============================================================
 
-const deleteRecord = async (recordId) => {
+const deleteAsset = async (assetId) => {
 
   try {
 
-    await deleteDoc(doc(db, COLLECTION_NAME, recordId));
+    await deleteDoc(doc(db, COLLECTION_NAME, assetId));
 
     return {
       success: true,
@@ -349,7 +362,7 @@ const deleteRecord = async (recordId) => {
 
   } catch (error) {
 
-    console.error("DashboardService: deleteRecord failed —", error.message);
+    console.error("DashboardService: deleteAsset failed —", error.message);
 
     throw error;
 
@@ -358,11 +371,11 @@ const deleteRecord = async (recordId) => {
 };
 
 export {
-  addRecord,
-  fetchRecords,
-  fetchRecordById,
-  updateRecord,
-  deleteRecord,
+  addAsset,
+  fetchAssets,
+  fetchAssetById,
+  updateAsset,
+  deleteAsset,
   createNotification,
   getNotifications,
   markAllNotificationsAsRead,
