@@ -26,7 +26,7 @@ const protectRoute = () => {
 
         if (!user) {
 
-            window.location.href = "../../pages/authentication/login.html";
+            window.location.href = "../../pages/auth/login.html";
 
         }
 

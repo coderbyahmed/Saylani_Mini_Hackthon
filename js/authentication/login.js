@@ -109,7 +109,7 @@ const handleLogin = async (event) => {
         // SYNC FIRESTORE
         // ====================================================
 
-        await syncUserDocument({
+        const synced = await syncUserDocument({
             user: response.user,
             provider: "password",
         });
@@ -118,14 +118,18 @@ const handleLogin = async (event) => {
         // SUCCESS
         // ====================================================
 
-        showSuccessToast("Login successful.", 2000);
+        if (synced) {
+            showSuccessToast("Login successful.", 2000);
+        } else {
+            showWarningToast("Login successful, but profile sync failed.", 5000);
+        }
 
         createNotification("login", "Login Successful", "You logged in successfully.").catch(() => {});
 
         setTimeout(() => {
             // TODO: Replace with actual dashboard path
             window.location.href = "../dashboard/dashboard.html";
-        }, 2000);
+        }, synced ? 2000 : 5000);
 
     }
 
@@ -187,12 +191,16 @@ const handleGoogleLogin = async () => {
         // SYNC FIRESTORE
         // ====================================================
 
-        await syncUserDocument({
+        const synced = await syncUserDocument({
             user,
             provider: "google",
         });
 
-        showSuccessToast("Login successful.", 3000);
+        if (synced) {
+            showSuccessToast("Login successful.", 3000);
+        } else {
+            showWarningToast("Login successful, but profile sync failed.", 5000);
+        }
 
         createNotification("login", "Login Successful", "You logged in successfully.").catch(() => {});
 
@@ -249,12 +257,16 @@ const handleGithubLogin = async () => {
 
         console.info("GitHub User:", user);
 
-        await syncUserDocument({
+        const synced = await syncUserDocument({
             user,
             provider: "github",
         });
 
-        showSuccessToast("Login successful.", 3000);
+        if (synced) {
+            showSuccessToast("Login successful.", 3000);
+        } else {
+            showWarningToast("Login successful, but profile sync failed.", 5000);
+        }
 
         createNotification("login", "Login Successful", "You logged in successfully.").catch(() => {});
 

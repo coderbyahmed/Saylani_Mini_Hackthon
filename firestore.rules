@@ -1,0 +1,64 @@
+// ============================================================
+// FIRESTORE SECURITY RULES
+// Firebase Console → Firestore Database → Rules → paste & Publish
+// (Or deploy with: firebase deploy --only firestore:rules)
+//
+// Why this file exists:
+// The project was left with locked rules (allow read/write: if false),
+// so every Firestore call failed with:
+//   "FirebaseError: Missing or insufficient permissions."
+// Auth signup/login worked, but saving the user profile threw and the
+// app showed "Something went wrong" — looking like login/signup was broken.
+// ============================================================
+
+rules_version = '2';
+
+service cloud.firestore {
+
+  match /databases/{database}/documents {
+
+    // Only a signed-in user can touch anything
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // --------------------------------------------------------
+    // USERS — profile data (only the owner may read/write)
+    // --------------------------------------------------------
+    match /users/{userId} {
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+      // needed by checkUserExistsByEmail() (query by email)
+      allow list: if isSignedIn();
+    }
+
+    // --------------------------------------------------------
+    // APP COLLECTIONS — signed-in users only
+    // --------------------------------------------------------
+    match /notifications/{docId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /activities/{docId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /recordData/{docId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /issues/{docId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /serviceHistory/{docId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // Everything else stays locked
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+  }
+
+}

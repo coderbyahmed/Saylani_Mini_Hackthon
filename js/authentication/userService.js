@@ -18,7 +18,7 @@ const saveUser = async ({ uid, fullName, email, provider = "password", photoURL 
         // Build a minimal user-like object for syncUserDocument
         const user = { uid, email, displayName: fullName, photoURL: photoURL || null };
 
-        await syncUserDocument({
+        return await syncUserDocument({
             user,
             provider,
             extraData: { fullName, photoURL },
@@ -26,9 +26,15 @@ const saveUser = async ({ uid, fullName, email, provider = "password", photoURL 
 
     } catch (error) {
 
+        // ====================================================
+        // NON-FATAL
+        // The Firebase Auth account is already created at this
+        // point, so a Firestore failure must not break signup.
+        // ====================================================
+
         console.error("Error saving user:", error);
 
-        throw error;
+        return false;
 
     }
 };

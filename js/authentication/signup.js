@@ -111,7 +111,7 @@ const handleSignup = async (event) => {
 
         const user = response.user;
 
-        await saveUser({
+        const saved = await saveUser({
             uid: user.uid,
             fullName,
             email,
@@ -123,14 +123,18 @@ const handleSignup = async (event) => {
 
         signupForm.reset();
 
-        showSuccessToast("Account created successfully.", 2500);
+        if (saved) {
+            showSuccessToast("Account created successfully.", 2500);
+        } else {
+            showWarningToast("Account created, but profile sync failed.", 5000);
+        }
 
         createNotification("signup", "Account Created", "Your account has been created successfully.").catch(() => {});
 
         // Wait so user can see the toast
         setTimeout(() => {
             window.location.href = "./login.html";
-        }, 2500);
+        }, saved ? 2500 : 5000);
 
     }
 
@@ -180,7 +184,7 @@ const handleGoogleSignup = async () => {
 
         const user = await signInWithGoogle();
 
-        await saveUser({
+        const saved = await saveUser({
             uid: user.uid,
             fullName: user.displayName,
             email: user.email,
@@ -190,7 +194,11 @@ const handleGoogleSignup = async () => {
 
         console.info("Google User:", user);
 
-        showSuccessToast("Signed in with Google successfully.", 5000);
+        if (saved) {
+            showSuccessToast("Signed in with Google successfully.", 5000);
+        } else {
+            showWarningToast("Signed in, but profile sync failed.", 5000);
+        }
 
         createNotification("signup", "Account Created", "Your account has been created successfully.").catch(() => {});
 
@@ -248,7 +256,7 @@ const handleGithubSignup = async () => {
 
         const user = await signInWithGithub();
 
-        await saveUser({
+        const saved = await saveUser({
             uid: user.uid,
             fullName: user.displayName,
             email: user.email,
@@ -258,7 +266,11 @@ const handleGithubSignup = async () => {
 
         console.info("GitHub User:", user);
 
-        showSuccessToast("Signed in with GitHub successfully.", 5000);
+        if (saved) {
+            showSuccessToast("Signed in with GitHub successfully.", 5000);
+        } else {
+            showWarningToast("Signed in, but profile sync failed.", 5000);
+        }
 
         createNotification("signup", "Account Created", "Your account has been created successfully.").catch(() => {});
 

@@ -60,7 +60,7 @@ const syncUserDocument = async ({ user, provider = "password", extraData = {} })
                 lastLoginAt: now,
             });
 
-            return;
+            return true;
 
         }
 
@@ -90,10 +90,19 @@ const syncUserDocument = async ({ user, provider = "password", extraData = {} })
             lastLoginAt: now,
         }, { merge: true });
 
+        return true;
+
     } catch (error) {
 
+        // ====================================================
+        // NON-FATAL
+        // Firestore rules may deny the write.  The Firebase
+        // Auth session is already valid, so report the failure
+        // to the caller instead of breaking the login flow.
+        // ====================================================
+
         console.error("Error syncing user document:", error);
-        throw error;
+        return false;
 
     }
 
